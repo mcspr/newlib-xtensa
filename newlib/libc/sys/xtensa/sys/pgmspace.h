@@ -72,7 +72,7 @@ extern "C" {
   __asm__ ( \
     "ssa8l\t%2\n\t"  /* SAR = (AR[`addr`] & 3) * 8; */ \
     "srl\t%0, %1"    /* AR[`res`] = AR[`word`] >> SAR; */ \
-    : "=r"(res) : "r"(word), "r"(addr))
+    : "=a"(res) : "r"(word), "r"(addr))
 
 // Inline assembler: Extract a "word" (32 bit) from adjacent two: `loword` and `hiword`,
 //                     according to byte offset of `addr`
@@ -80,7 +80,16 @@ extern "C" {
   __asm__ ( \
     "ssa8l\t%3\n\t"    /* SAR = (AR[`addr`] & 3) * 8; */ \
     "src\t%0, %2, %1"  /* AR[`res`] = (AR[`hiword`] << 32 | AR[`loword`]) >> SAR; */ \
-    : "=r"(res) : "r"(loword), "r"(hiword), "r"(addr))
+    : "=a"(res) : "r"(loword), "r"(hiword), "r"(addr))
+
+// Inline assembler: Extract two "words" (32 bit x2) from adjacent three: `loword`,
+//                     `midword` and `hiword`, according to byte offset of `addr`
+#define __pgm_extract_qword(loword, midword, hiword, addr, res) \
+  __asm__ ( \
+    "ssa8l\t%4\n\t"        /* SAR = (AR[`addr`] & 3) * 8; */ \
+    "src\t%0, %2, %1\n\t"  /* AR[`res`(lo)] = (AR[`midword`] << 32 | AR[`loword`]) >> SAR; */ \
+    "src\t%D0, %3, %2"     /* AR[`res`(hi)] = (AR[`hiword`] << 32 | AR[`midword`]) >> SAR; */ \
+    : "=a"(res) : "r"(loword), "r"(midword), "r"(hiword), "r"(addr))
 
 // Literature: Xtensa(R) Instruction Set Reference Manual,
 //               "SRC - Shift Right Combined" [p.528], "SRL - Shift Right Logical" [p.529]
@@ -93,6 +102,12 @@ extern "C" {
   do { \
     const uint32_t* __ptr = __pgm_cast_u32ptr(addr); \
     __pgm_extract_dword(__ptr[0], __ptr[1], addr, res); \
+  } while (0)
+
+#define pgm_read_qword_with_offset(addr, res) \
+  do { \
+    const uint32_t* __ptr = __pgm_cast_u32ptr(addr); \
+    __pgm_extract_qword(__ptr[0], __ptr[1], __ptr[2], addr, res); \
   } while (0)
 
 static inline uint8_t pgm_read_byte_inlined(const void* addr) {
@@ -116,15 +131,11 @@ static inline float pgm_read_float_unaligned(const void* addr) {
   return res;
 }
 
-/* Use union evil magic to allow writing to 2 halves of double 8-byte quantity w/o generating a GCC warning. */
+/* Also in case of uint64_t and double (see above). */
 static inline double pgm_read_double_unaligned(const void* addr) {
-  union {
-    double res;
-    uint32_t i[2];
-  } u;
-  pgm_read_dword_with_offset(addr, u.i[0]);
-  pgm_read_dword_with_offset((char *)addr + 4, u.i[1]);
-  return u.res;
+  double res;
+  pgm_read_qword_with_offset(addr, res);
+  return res;
 }
 
 #define pgm_read_byte(addr)                pgm_read_byte_inlined(addr)

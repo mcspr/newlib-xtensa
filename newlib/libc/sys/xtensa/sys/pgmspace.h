@@ -89,7 +89,7 @@ extern "C" {
     "ssa8l\t%4\n\t"        /* SAR = (AR[`addr`] & 3) * 8; */ \
     "src\t%0, %2, %1\n\t"  /* AR[`res`(lo)] = (AR[`midword`] << 32 | AR[`loword`]) >> SAR; */ \
     "src\t%D0, %3, %2"     /* AR[`res`(hi)] = (AR[`hiword`] << 32 | AR[`midword`]) >> SAR; */ \
-    : "=a"(res) : "r"(loword), "r"(midword), "r"(hiword), "r"(addr))
+    : "=&a"(res) : "r"(loword), "r"(midword), "r"(hiword), "r"(addr))
 
 // Literature: Xtensa(R) Instruction Set Reference Manual,
 //               "SRC - Shift Right Combined" [p.528], "SRL - Shift Right Logical" [p.529]

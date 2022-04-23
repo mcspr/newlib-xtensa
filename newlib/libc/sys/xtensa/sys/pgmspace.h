@@ -110,14 +110,14 @@ extern "C" {
     __pgm_extract_qword(__ptr[0], __ptr[1], __ptr[2], addr, res); \
   } while (0)
 
-static inline uint8_t pgm_read_byte_inlined(const void* addr) {
+static inline uint8_t __attribute__((always_inline)) pgm_read_byte_inlined(const void* addr) {
   uint32_t res;
   pgm_read_with_offset(addr, res);
   return res;  /* Implicit cast to uint8_t masks the lower byte from the returned word */
 }
 
 /* Although this says "word", it's actually 16 bit, i.e. half word on Xtensa */
-static inline uint16_t pgm_read_word_inlined(const void* addr) {
+static inline uint16_t __attribute__((always_inline)) pgm_read_word_inlined(const void* addr) {
   uint32_t res;
   pgm_read_with_offset(addr, res);
   return res;  /* Implicit cast to uint16_t masks the lower half-word from the returned word */
@@ -125,14 +125,14 @@ static inline uint16_t pgm_read_word_inlined(const void* addr) {
 
 /* Can't legally cast bits of uint32_t to a float w/o conversion or std::memcpy, which is inefficient. */
 /* The ASM block doesn't care the type, so just pass in what C thinks is a float and return in custom fcn. */
-static inline float pgm_read_float_unaligned(const void* addr) {
+static inline float __attribute__((always_inline)) pgm_read_float_unaligned(const void* addr) {
   float res;
   pgm_read_dword_with_offset(addr, res);
   return res;
 }
 
 /* Also in case of uint64_t and double (see above). */
-static inline double pgm_read_double_unaligned(const void* addr) {
+static inline double __attribute__((always_inline)) pgm_read_double_unaligned(const void* addr) {
   double res;
   pgm_read_qword_with_offset(addr, res);
   return res;
@@ -152,7 +152,7 @@ static inline double pgm_read_double_unaligned(const void* addr) {
     #define pgm_read_ptr_aligned(addr)     (*(const void* const*)(addr))
 #endif
 
-static inline uint32_t pgm_read_dword_unaligned(const void *addr) {
+static inline uint32_t __attribute__((always_inline)) pgm_read_dword_unaligned(const void *addr) {
   uint32_t res;
   pgm_read_dword_with_offset(addr, res);
   return res;

@@ -122,15 +122,6 @@ char *strstr(const char *haystack, const char *needle)
     return rom_strstr(haystack, needle);
 }
 
-char *strnstr(const char *haystack, const char *needle, size_t haystacklen)
-{
-    extern char *newlib_strnstr(const char *, const char *, size_t);
-    if (__xtensa_force_aligned(needle))
-        return strnstr_P(haystack, needle, haystacklen);
-
-    return newlib_strnstr(haystack, needle, haystacklen);
-}
-
 void *memccpy(void *__restrict dest, const void *__restrict src, int c, size_t n)
 {
     extern void *newlib_memccpy(void *__restrict, const void *__restrict, int, size_t);
@@ -138,15 +129,6 @@ void *memccpy(void *__restrict dest, const void *__restrict src, int c, size_t n
         return memccpy_P(dest, src, c, n);
 
     return newlib_memccpy(dest, src, c, n);
-}
-
-void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen)
-{
-    extern void *newlib_memmem(const void*, size_t, const void*, size_t);
-    if (__xtensa_force_aligned(needle))
-        return memmem_P(haystack, haystacklen, needle, needlelen);
-
-    return newlib_memmem(haystack, haystacklen, needle, needlelen);
 }
 
 size_t strnlen(const char *s, size_t n)

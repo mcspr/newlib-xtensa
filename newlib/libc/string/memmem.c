@@ -62,11 +62,16 @@ QUICKREF
 #include <string.h>
 #include <stdint.h>
 
+/* ESP8266 - same as memchr, assume both 'haystack' and 'needle' require aligned reads */
+
+#include <sys/string.h>
+#include <sys/pgmspace.h>
+
 #if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
 
 /* Small and efficient memmem implementation (quadratic worst-case).  */
 void *
-newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
+memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
 {
   const char *hs = haystack;
   const char *ne = needle;
@@ -74,15 +79,15 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
   if (ne_len == 0)
     return (void *)hs;
   int i;
-  int c = ne[0];
+  int c = pgm_read_byte (ne);
   const char *end = hs + hs_len - ne_len;
 
   for ( ; hs <= end; hs++)
   {
-    if (hs[0] != c)
+    if (pgm_read_byte (hs) != c)
       continue;
     for (i = ne_len - 1; i != 0; i--)
-      if (hs[i] != ne[i])
+      if (pgm_read_byte (hs + i) != pgm_read_byte (ne + i))
 	break;
     if (i == 0)
       return (void *)hs;
@@ -95,9 +100,41 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
 
 # define RETURN_TYPE void *
 # define AVAILABLE(h, h_l, j, n_l) ((j) <= (h_l) - (n_l))
+#define __need_size_t
+#include <stddef.h>
+#define CMP_FUNC slow_memcmp
 # include "str-two-way.h"
 
-#define hash2(p) (((size_t)(p)[0] - ((size_t)(p)[-1] << 3)) % sizeof (shift))
+//#define hash2(p) (((size_t)(p)[0] - ((size_t)(p)[-1] << 3)) % sizeof (shift))
+#define hash2(p) (((size_t)(pgm_read_byte(p)) - ((size_t)(pgm_read_byte(p - 1)) << 3)) % sizeof (shift))
+
+/* str-two-way.h uses this to compare parts of 'needle', memmem uses it for 'haystack' and 'needle' */
+static int slow_memcmp(const void* v1, const void* v2, size_t n)
+{
+    int result = 0;
+    const uint8_t* read1 = (const uint8_t*)v1;
+    const uint8_t* read2 = (const uint8_t*)v2;
+
+    while (n > 0) {
+        uint8_t ch1 = pgm_read_byte(read1);
+        uint8_t ch2 = pgm_read_byte(read2);
+        if (ch1 != ch2) {
+            result = (int)(ch1)-(int)(ch2);
+            break;
+        }
+
+        read1++;
+        read2++;
+        n--;
+    }
+
+    return result;
+}
+
+static inline uint32_t slow_read2 (const unsigned char* p)
+{
+    return (uint32_t)(pgm_read_byte (p) << 16) | (uint32_t)pgm_read_byte (p + 1);
+}
 
 /* Fast memmem algorithm with guaranteed linear-time performance.
    Small needles up to size 2 use a dedicated linear search.  Longer needles
@@ -111,7 +148,7 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
    The limit also implies worst-case performance is linear.
    Needles larger than 256 characters use the linear-time Two-Way algorithm.  */
 void *
-newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
+memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
 {
   const unsigned char *hs = haystack;
   const unsigned char *ne = needle;
@@ -119,7 +156,7 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
   if (ne_len == 0)
     return (void *) hs;
   if (ne_len == 1)
-    return (void *) memchr (hs, ne[0], hs_len);
+    return (void *) memchr (hs, pgm_read_byte(ne), hs_len);
 
   /* Ensure haystack length is >= needle length.  */
   if (hs_len < ne_len)
@@ -129,7 +166,7 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
 
   if (ne_len == 2)
     {
-      uint32_t nw = ne[0] << 16 | ne[1], hw = hs[0] << 16 | hs[1];
+      uint32_t nw = slow_read2(ne), hw = slow_read2(hs);
       for (hs++; hs <= end && hw != nw; )
 	hw = hw << 16 | *++hs;
       return hw == nw ? (void *)(hs - 1) : NULL;
@@ -170,9 +207,9 @@ newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t n
 
       /* The last 2 characters match.  If the needle is long, check a
 	 fixed number of characters first to quickly filter out mismatches.  */
-      if (m1 <= 15 || memcmp (hs + offset, ne + offset, sizeof (long)) == 0)
+      if (m1 <= 15 || slow_memcmp (hs + offset, ne + offset, sizeof (long)) == 0)
 	{
-	  if (memcmp (hs, ne, m1) == 0)
+	  if (slow_memcmp (hs, ne, m1) == 0)
 	    return (void *) hs;
 
 	  /* Adjust filter offset when it doesn't find the mismatch.  */

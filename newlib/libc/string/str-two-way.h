@@ -114,8 +114,8 @@ critical_factorization (const unsigned char *needle, size_t needle_len,
   k = p = 1;
   while (j + k < needle_len)
     {
-      a = CANON_ELEMENT (needle[j + k]);
-      b = CANON_ELEMENT (needle[(size_t)(max_suffix + k)]);
+      a = CANON_ELEMENT (pgm_read_byte (needle + j + k));
+      b = CANON_ELEMENT (pgm_read_byte (needle + (size_t)(max_suffix + k)));
       if (a < b)
 	{
 	  /* Suffix is smaller, period is entire prefix so far.  */
@@ -149,8 +149,8 @@ critical_factorization (const unsigned char *needle, size_t needle_len,
   k = p = 1;
   while (j + k < needle_len)
     {
-      a = CANON_ELEMENT (needle[j + k]);
-      b = CANON_ELEMENT (needle[max_suffix_rev + k]);
+      a = CANON_ELEMENT (pgm_read_byte (needle + j + k));
+      b = CANON_ELEMENT (pgm_read_byte (needle + max_suffix_rev + k));
       if (b < a)
 	{
 	  /* Suffix is smaller, period is entire prefix so far.  */
@@ -222,15 +222,15 @@ two_way_short_needle (const unsigned char *haystack, size_t haystack_len,
 	{
 	  /* Scan for matches in right half.  */
 	  i = MAX (suffix, memory);
-	  while (i < needle_len && (CANON_ELEMENT (needle[i])
-				    == CANON_ELEMENT (haystack[i + j])))
+	  while (i < needle_len && (CANON_ELEMENT (pgm_read_byte (needle + i))
+				    == CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 	    ++i;
 	  if (needle_len <= i)
 	    {
 	      /* Scan for matches in left half.  */
 	      i = suffix - 1;
-	      while (memory < i + 1 && (CANON_ELEMENT (needle[i])
-					== CANON_ELEMENT (haystack[i + j])))
+	      while (memory < i + 1 && (CANON_ELEMENT (pgm_read_byte (needle + i))
+					== CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 		--i;
 	      if (i + 1 < memory + 1)
 		return (RETURN_TYPE) (haystack + j);
@@ -256,15 +256,15 @@ two_way_short_needle (const unsigned char *haystack, size_t haystack_len,
 	{
 	  /* Scan for matches in right half.  */
 	  i = suffix;
-	  while (i < needle_len && (CANON_ELEMENT (needle[i])
-				    == CANON_ELEMENT (haystack[i + j])))
+	  while (i < needle_len && (CANON_ELEMENT (pgm_read_byte (needle + i))
+				    == CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 	    ++i;
 	  if (needle_len <= i)
 	    {
 	      /* Scan for matches in left half.  */
 	      i = suffix - 1;
-	      while (i != SIZE_MAX && (CANON_ELEMENT (needle[i])
-				       == CANON_ELEMENT (haystack[i + j])))
+	      while (i != SIZE_MAX && (CANON_ELEMENT (pgm_read_byte (needle + i))
+				       == CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 		--i;
 	      if (i == SIZE_MAX)
 		return (RETURN_TYPE) (haystack + j);
@@ -311,7 +311,7 @@ two_way_long_needle (const unsigned char *haystack, size_t haystack_len,
   for (i = 0; i < 1U << CHAR_BIT; i++)
     shift_table[i] = needle_len;
   for (i = 0; i < needle_len; i++)
-    shift_table[CANON_ELEMENT (needle[i])] = needle_len - i - 1;
+    shift_table[CANON_ELEMENT (pgm_read_byte (needle + i))] = needle_len - i - 1;
 
   /* Perform the search.  Each iteration compares the right half
      first.  */
@@ -327,7 +327,7 @@ two_way_long_needle (const unsigned char *haystack, size_t haystack_len,
 	{
 	  /* Check the last byte first; if it does not match, then
 	     shift to the next possible match location.  */
-	  shift = shift_table[CANON_ELEMENT (haystack[j + needle_len - 1])];
+	  shift = shift_table[CANON_ELEMENT (pgm_read_byte (haystack + j + needle_len - 1))];
 	  if (0 < shift)
 	    {
 	      if (memory && shift < period)
@@ -344,15 +344,15 @@ two_way_long_needle (const unsigned char *haystack, size_t haystack_len,
 	  /* Scan for matches in right half.  The last byte has
 	     already been matched, by virtue of the shift table.  */
 	  i = MAX (suffix, memory);
-	  while (i < needle_len - 1 && (CANON_ELEMENT (needle[i])
-					== CANON_ELEMENT (haystack[i + j])))
+	  while (i < needle_len - 1 && (CANON_ELEMENT (pgm_read_byte (needle + i))
+					== CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 	    ++i;
 	  if (needle_len - 1 <= i)
 	    {
 	      /* Scan for matches in left half.  */
 	      i = suffix - 1;
-	      while (memory < i + 1 && (CANON_ELEMENT (needle[i])
-					== CANON_ELEMENT (haystack[i + j])))
+	      while (memory < i + 1 && (CANON_ELEMENT (pgm_read_byte (needle + i))
+					== CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 		--i;
 	      if (i + 1 < memory + 1)
 		return (RETURN_TYPE) (haystack + j);
@@ -379,7 +379,7 @@ two_way_long_needle (const unsigned char *haystack, size_t haystack_len,
 	{
 	  /* Check the last byte first; if it does not match, then
 	     shift to the next possible match location.  */
-	  shift = shift_table[CANON_ELEMENT (haystack[j + needle_len - 1])];
+	  shift = shift_table[CANON_ELEMENT (pgm_read_byte (haystack + j + needle_len - 1))];
 	  if (0 < shift)
 	    {
 	      j += shift;
@@ -388,15 +388,15 @@ two_way_long_needle (const unsigned char *haystack, size_t haystack_len,
 	  /* Scan for matches in right half.  The last byte has
 	     already been matched, by virtue of the shift table.  */
 	  i = suffix;
-	  while (i < needle_len - 1 && (CANON_ELEMENT (needle[i])
-					== CANON_ELEMENT (haystack[i + j])))
+	  while (i < needle_len - 1 && (CANON_ELEMENT (pgm_read_byte (needle + i))
+					== CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 	    ++i;
 	  if (needle_len - 1 <= i)
 	    {
 	      /* Scan for matches in left half.  */
 	      i = suffix - 1;
-	      while (i != SIZE_MAX && (CANON_ELEMENT (needle[i])
-				       == CANON_ELEMENT (haystack[i + j])))
+	      while (i != SIZE_MAX && (CANON_ELEMENT (pgm_read_byte (needle + i))
+				       == CANON_ELEMENT (pgm_read_byte (haystack + i + j))))
 		--i;
 	      if (i == SIZE_MAX)
 		return (RETURN_TYPE) (haystack + j);

@@ -30,20 +30,36 @@ void *	 memccpy_P(void * __restrict, const void * __restrict, int, size_t);
 void *   memchr_P(const void *, int, size_t);
 
 char 	*strncpy_P(char *__restrict, const char *__restrict, size_t);
-#define strcpy_P(dest, src)          strncpy_P((dest), (src), SIZE_IRRELEVANT)
+static inline char *strcpy_P(char *__restrict dest, const char *__restrict src)
+{
+    return strncpy_P(dest, src, SIZE_IRRELEVANT);
+}
 
 char 	*strncat_P(char *__restrict, const char *__restrict, size_t);
-#define strcat_P(dest, src)          strncat_P((dest), (src), SIZE_IRRELEVANT)
+static inline char *strcat_P(char *__restrict dest, const char *__restrict src)
+{
+    return strncat_P(dest, src, SIZE_IRRELEVANT);
+}
 
 int	 strncmp_P(const char *, const char *, size_t);
-#define strcmp_P(str1, str2P)          strncmp_P((str1), (str2P), SIZE_IRRELEVANT)
+static inline int strcmp_P(const char *str1, const char *str2)
+{
+    return strncmp_P(str1, str2, SIZE_IRRELEVANT);
+}
 
 int	 strncasecmp_P(const char *, const char *, size_t);
-#define strcasecmp_P(str1, str2P)          strncasecmp_P((str1), (str2P), SIZE_IRRELEVANT)
+static inline int strcasecmp_P(const char *str1, const char *str2)
+{
+    return strncasecmp_P(str1, str2, SIZE_IRRELEVANT);
+}
 
 size_t	 strnlen_P(const char *, size_t);
-#define strlen_P(strP)          strnlen_P((strP), SIZE_IRRELEVANT)
+static inline size_t strlen_P(const char *s)
+{
+    return strnlen_P(s, SIZE_IRRELEVANT);
+}
 
+char 	*strnstr_P(const char *, const char *, size_t);
 char 	*strstr_P(const char *, const char *);
 
 #ifdef __cplusplus

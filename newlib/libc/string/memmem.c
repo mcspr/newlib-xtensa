@@ -66,7 +66,7 @@ QUICKREF
 
 /* Small and efficient memmem implementation (quadratic worst-case).  */
 void *
-memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
+newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
 {
   const char *hs = haystack;
   const char *ne = needle;
@@ -111,7 +111,7 @@ memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
    The limit also implies worst-case performance is linear.
    Needles larger than 256 characters use the linear-time Two-Way algorithm.  */
 void *
-memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
+newlib_memmem (const void *haystack, size_t hs_len, const void *needle, size_t ne_len)
 {
   const unsigned char *hs = haystack;
   const unsigned char *ne = needle;

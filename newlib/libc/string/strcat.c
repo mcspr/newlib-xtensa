@@ -54,7 +54,7 @@ QUICKREF
 /*SUPPRESS 530*/
 
 char *
-strcat (char *__restrict s1,
+newlib_strcat (char *__restrict s1,
 	const char *__restrict s2)
 {
 #if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)

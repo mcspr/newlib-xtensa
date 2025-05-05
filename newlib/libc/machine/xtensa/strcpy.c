@@ -1,3 +1,5 @@
+// ESP8266-specific override at clibrary_string.c
+#if 0
 /* strcpy.c - Xtensa code to determine if source is PMEM or RAM and call appropriate strcpy routine.
 
   GCC is a very smart compiler, and it will, in fact, replace printf(), and its
@@ -32,3 +34,4 @@ char *strncpy(char *dest, const char *src, size_t n)
     if (src >= (const char *)0x40000000) return strncpy_P(dest, src, n);
     else return __fast_strncpy(dest, src, n);
 }
+#endif

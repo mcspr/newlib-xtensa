@@ -36,7 +36,7 @@ QUICKREF
 #include <ctype.h>
 
 int
-strcasecmp (const char *s1,
+newlib_strcasecmp (const char *s1,
 	const char *s2)
 {
   int d = 0;

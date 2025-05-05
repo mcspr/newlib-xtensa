@@ -38,13 +38,17 @@ QUICKREF
  * first slen characters of s.
  */
 char *
-strnstr(const char *haystack, const char *needle, size_t haystack_len)
+newlib_strnstr(const char *haystack, const char *needle, size_t haystack_len)
 {
-  size_t needle_len = strnlen(needle, haystack_len);
+  extern size_t newlib_strnlen(const char*, size_t);
+  extern void *newlib_memmem(const void*, size_t, const void*, size_t);
+  extern void *newlib_memchr(const void*, int, size_t);
+
+  size_t needle_len = newlib_strnlen(needle, haystack_len);
 
   if (needle_len < haystack_len || !needle[needle_len]) {
-    char *x = memmem(haystack, haystack_len, needle, needle_len);
-    if (x && !memchr(haystack, 0, x - haystack))
+    char *x = newlib_memmem(haystack, haystack_len, needle, needle_len);
+    if (x && !newlib_memchr(haystack, 0, x - haystack))
       return x;
   }
   return NULL;

@@ -62,7 +62,7 @@ QUICKREF
 #define DETECTCHAR(X,MASK) (DETECTNULL(X ^ MASK))
 
 void *
-memchr (const void *src_void,
+newlib_memchr (const void *src_void,
 	int c,
 	size_t length)
 {

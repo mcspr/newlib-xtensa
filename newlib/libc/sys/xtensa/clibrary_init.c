@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#if 0
 const char * __progname = 0;
 
 void
@@ -40,3 +41,4 @@ __clibrary_init (int argc, char **argv, char **envp,
   if (fini)
     _atexit (fini);
 }
+#endif

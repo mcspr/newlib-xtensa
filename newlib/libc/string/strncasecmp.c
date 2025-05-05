@@ -37,7 +37,7 @@ QUICKREF
 #include <ctype.h>
 
 int 
-strncasecmp (const char *s1,
+newlib_strncasecmp (const char *s1,
 	const char *s2,
 	size_t n)
 {

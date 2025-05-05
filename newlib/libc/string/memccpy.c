@@ -56,7 +56,7 @@ PORTABILITY
 
 
 void *
-memccpy (void *__restrict dst0,
+newlib_memccpy (void *__restrict dst0,
 	const void *__restrict src0,
 	int endchar0,
 	size_t len0)

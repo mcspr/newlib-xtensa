@@ -205,6 +205,9 @@ void* memmem_P(const void* buf, size_t bufSize, const void* findP, size_t findPS
     const uint8_t* find = (uint8_t*)findP;
     uint8_t first = pgm_read_byte(find++);
 
+    if (!findPSize)
+        return (void *)buf;
+
     findPSize--;
 
     while (bufSize > 0) {

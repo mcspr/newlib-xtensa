@@ -314,14 +314,17 @@ char* strncat_P(char* __restrict dest, const char* __restrict src, size_t size)
     return dest;
 }
 
-int strncmp_P(const char* str1, const char* str2P, size_t size)
+int strncmp_P(const char* s1, const char* s2, size_t size)
 {
+    const unsigned char *p1 = (const unsigned char *)s1;
+    const unsigned char *p2 = (const unsigned char *)s2;
+
     int result = 0;
 
     while (size > 0)
     {
-        char ch1 = *str1++;
-        char ch2 = pgm_read_byte(str2P++);
+        int ch1 = *p1++;
+        int ch2 = pgm_read_byte(p2++);
         result = ch1 - ch2;
         if (result != 0 || ch2 == '\0')
         {
@@ -334,16 +337,19 @@ int strncmp_P(const char* str1, const char* str2P, size_t size)
     return result;
 }
 
-int strncasecmp_P(const char* str1, const char* str2P, size_t size)
+int strncasecmp_P(const char* s1, const char* s2, size_t size)
 {
+    const unsigned char *p1 = (const unsigned char *)s1;
+    const unsigned char *p2 = (const unsigned char *)s2;
+
     int result = 0;
 
     while (size > 0)
     {
-        char ch1 = tolower(*str1++);
-        char ch2 = tolower(pgm_read_byte(str2P++));
-        result = ch1 - ch2;
-        if (result != 0 || ch2 == '\0')
+        const int c1 = tolower(*p1++);
+        const int c2 = tolower(pgm_read_byte(p2++));
+        result = c1 - c2;
+        if (result != 0 || c2 == '\0')
         {
             break;
         }

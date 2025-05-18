@@ -187,7 +187,8 @@ void* memccpy_P(void* dest, const void* src, int c, size_t count)
         *write++ = ch;
         count--;
         if (c == ch) {
-            return write; // the value after the found c
+            result = (void *)write; // the value after the found c
+            break;
         }
     }
 

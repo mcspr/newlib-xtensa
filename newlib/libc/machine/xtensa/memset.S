@@ -1,5 +1,3 @@
-// ESP8266 has this in ROM
-#if 0
 /* ANSI C standard library function memset.
 
    Copyright (c) 2001-2008 Tensilica Inc.
@@ -193,4 +191,3 @@ memset:
 	.end schedule
 
 	.size	memset, . - memset
-#endif

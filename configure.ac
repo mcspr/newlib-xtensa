@@ -152,7 +152,7 @@ libgcj="target-libffi \
 # Note that libiberty is not a target library.
 target_libraries="target-libgcc \
 		target-libbacktrace \
-		target-libgloss \
+		target-gloss \
 		target-newlib \
 		target-libgomp \
 		target-libcilkrts \

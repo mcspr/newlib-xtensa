@@ -63,9 +63,9 @@ __strncpy_aux:
 
 
 	.align	4
-	.global	strncpy
-	.type	strncpy, @function
-strncpy:
+	.global	__fast_strncpy
+	.type	__fast_strncpy, @function
+__fast_strncpy:
 	leaf_entry sp, 16
 	/* a2 = dst, a3 = src */
 
@@ -271,4 +271,4 @@ strncpy:
 	leaf_return
 .end schedule
 
-	.size	strncpy, . - strncpy
+	.size	__fast_strncpy, . - __fast_strncpy

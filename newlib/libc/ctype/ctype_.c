@@ -121,7 +121,7 @@ const char _ctype_[1 + 256] = {
 
 #else	/* !ALLOW_NEGATIVE_CTYPE_INDEX */
 
-const char _ctype_[1 + 256] = {
+const char _ctype_[1 + 256] PROGMEM = {
 	0,
 	_CTYPE_DATA_0_127,
 	_CTYPE_DATA_128_255

@@ -42,10 +42,11 @@
 #include <inttypes.h>
 #include <limits.h>
 #include "../locale/setlocale.h"
+#include <sys/pgmspace.h>
 
 #define _ctloc(x) (_CurrentTimeLocale->x)
 
-static const int _DAYS_BEFORE_MONTH[12] =
+static const int _DAYS_BEFORE_MONTH[12] PROGMEM =
 {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
 #define SET_MDAY 1

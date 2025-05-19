@@ -1,0 +1,23 @@
+Based on the main branch from https://sourceware.org/git/newlib-cygwin.git
+At the time of writing this, version is somewhere in-between snapshots 4.5.0 and 4.6.0
+
+Some changes picked up from the https://github.com/espressif/newlib-esp32/
+i.e. ["newlib-esp32 based on 4.3.0"](https://github.com/espressif/newlib-esp32/commit/4319e8a02e15c8bc836696901885f9f0a0a6a51c)
+
+Like upstream, provided by Espressif for ESP32 boards, implementation is split between
+- libc/machine - providing libc replacement functions and general api overrides
+  compared to newlib-4.0.0, build system prefers to use identically named files as libc.a replacements
+  files previously using `#if 0` to wrap unused code now simply provide an override via Makefile.inc
+  files not mentioned in the machine Makefile.inc are not built, those can also be left unmodified
+
+- libc/sys - unlike newlib-xtensa branch, some code is moved to libc/machine & libgloss
+  xtensa sys directory had to be restored, allowing to build ..._P aka pgmspace stdio & string funcs
+  xtensa target vendored headers are changed to reflect the older architecture used, mainly removing hw fp support
+  (TODO esp8266/Arduino builder might preventively replace those anyway, though, by using lx106-hal ones)
+
+- libgloss - crt0 install & build, libc init (unused) & syscalls (partially used)
+  esp8266 dummy board is provied, porting some sys implementations from the generic xtensa esp32 code
+  esp8266 flavour removes boards init & semihosting & qemu libs through conditionals
+
+Note that when updating any build files, **autoconf-1.15** must be used.
+At the time of writing this, autoconf-1.16+ results in broken build rules, ["README-maintainer-mode"](README-maintainer-mode) versions should be respected.

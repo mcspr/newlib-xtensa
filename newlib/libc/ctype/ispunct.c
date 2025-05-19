@@ -47,5 +47,5 @@ No supporting OS subroutines are required.
 int
 ispunct (int c)
 {
-	return(__CTYPE_PTR[c+1] & _P);
+	return(pgm_read_byte(&__CTYPE_PTR[c+1]) & _P);
 }

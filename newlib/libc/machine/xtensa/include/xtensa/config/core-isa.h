@@ -46,14 +46,14 @@
 #ifdef __XCHAL_HAVE_WINDOWED
 #define XCHAL_HAVE_WINDOWED		__XCHAL_HAVE_WINDOWED
 #else
-#define XCHAL_HAVE_WINDOWED		1	/* windowed registers option */
+#define XCHAL_HAVE_WINDOWED		0	/* windowed registers option */
 #endif
 
 #undef XCHAL_NUM_AREGS
 #ifdef __XCHAL_NUM_AREGS
 #define XCHAL_NUM_AREGS		__XCHAL_NUM_AREGS
 #else
-#define XCHAL_NUM_AREGS		64	/* num of physical addr regs */
+#define XCHAL_NUM_AREGS		16	/* num of physical addr regs */
 #endif
 
 #undef XCHAL_HAVE_DENSITY
@@ -67,7 +67,7 @@
 #ifdef __XCHAL_HAVE_LOOPS
 #define XCHAL_HAVE_LOOPS		__XCHAL_HAVE_LOOPS
 #else
-#define XCHAL_HAVE_LOOPS		1	/* zero-overhead loops */
+#define XCHAL_HAVE_LOOPS		0	/* zero-overhead loops */
 #endif
 
 #undef XCHAL_HAVE_L32R
@@ -81,14 +81,14 @@
 #ifdef __XCHAL_HAVE_FP
 #define XCHAL_HAVE_FP		__XCHAL_HAVE_FP
 #else
-#define XCHAL_HAVE_FP		1	/* single prec floating point */
+#define XCHAL_HAVE_FP		0	/* single prec floating point */
 #endif
 
 #undef XCHAL_HAVE_FP_SQRT
 #ifdef __XCHAL_HAVE_FP_SQRT
 #define XCHAL_HAVE_FP_SQRT		__XCHAL_HAVE_FP_SQRT
 #else
-#define XCHAL_HAVE_FP_SQRT		1	/* FP with SQRT instructions */
+#define XCHAL_HAVE_FP_SQRT		0	/* FP with SQRT instructions */
 #endif
 
 #undef XCHAL_HAVE_DFP

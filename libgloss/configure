@@ -589,12 +589,22 @@ LIBOBJS
 multi_basedir
 target_makefile_frag_path
 host_makefile_frag_path
+HAVE_XTENSA_WINDOWED_FALSE
+HAVE_XTENSA_WINDOWED_TRUE
+HAVE_XTENSA_OPENOCD_FALSE
+HAVE_XTENSA_OPENOCD_TRUE
+HAVE_XTENSA_QEMU_FALSE
+HAVE_XTENSA_QEMU_TRUE
+HAVE_XTENSA_BOARDS_FALSE
+HAVE_XTENSA_BOARDS_TRUE
 HAVE_XTENSA_BOARD_ESP_FALSE
 HAVE_XTENSA_BOARD_ESP_TRUE
 HAVE_XTENSA_BOARD_ESP32S3_FALSE
 HAVE_XTENSA_BOARD_ESP32S3_TRUE
 HAVE_XTENSA_BOARD_ESP32_FALSE
 HAVE_XTENSA_BOARD_ESP32_TRUE
+HAVE_XTENSA_BOARD_ESP8266_FALSE
+HAVE_XTENSA_BOARD_ESP8266_TRUE
 XTENSA_BOARD_ESP
 SPARC_CYGMONLDSCRIPTTEMPL
 SPARC_BUILD_SLITE_FALSE
@@ -796,6 +806,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -874,6 +885,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1126,6 +1138,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1263,7 +1284,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1416,6 +1437,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -5570,7 +5592,15 @@ sparclet-*-aout*) SPARC_CYGMONLDSCRIPTTEMPL=cygmon.ld.src; ac_config_files="$ac_
 esac
 
 
-XTENSA_BOARD_ESP=`echo $CC | sed 's/.*-mdynconfig=xtensa_\(.*\)\.so.*/\1/;s/.*-mcpu=\(^ *\).*/\1/;s/.* .*/unknown/'`
+XTENSA_BOARD_ESP="esp8266"
+
+ if test x$XTENSA_BOARD_ESP = xesp8266; then
+  HAVE_XTENSA_BOARD_ESP8266_TRUE=
+  HAVE_XTENSA_BOARD_ESP8266_FALSE='#'
+else
+  HAVE_XTENSA_BOARD_ESP8266_TRUE='#'
+  HAVE_XTENSA_BOARD_ESP8266_FALSE=
+fi
 
  if test x$XTENSA_BOARD_ESP = xesp32; then
   HAVE_XTENSA_BOARD_ESP32_TRUE=
@@ -5588,12 +5618,44 @@ else
   HAVE_XTENSA_BOARD_ESP32S3_FALSE=
 fi
 
- if echo $XTENSA_BOARD_ESP | grep -w -e esp32 -e esp32s3 >/dev/null 2>&1; then
+ if echo $XTENSA_BOARD_ESP | grep -w -e esp8266 -e esp32 -e esp32s3 >/dev/null 2>&1; then
   HAVE_XTENSA_BOARD_ESP_TRUE=
   HAVE_XTENSA_BOARD_ESP_FALSE='#'
 else
   HAVE_XTENSA_BOARD_ESP_TRUE='#'
   HAVE_XTENSA_BOARD_ESP_FALSE=
+fi
+
+ if test x$XTENSA_BOARD_ESP = xesp32 -o x$XTENSA_BOARD_ESP = esp32s3; then
+  HAVE_XTENSA_BOARDS_TRUE=
+  HAVE_XTENSA_BOARDS_FALSE='#'
+else
+  HAVE_XTENSA_BOARDS_TRUE='#'
+  HAVE_XTENSA_BOARDS_FALSE=
+fi
+
+ if test x$XTENSA_BOARD_ESP = xesp32 -o x$XTENSA_BOARD_ESP = esp32s3; then
+  HAVE_XTENSA_QEMU_TRUE=
+  HAVE_XTENSA_QEMU_FALSE='#'
+else
+  HAVE_XTENSA_QEMU_TRUE='#'
+  HAVE_XTENSA_QEMU_FALSE=
+fi
+
+ if test x$XTENSA_BOARD_ESP = xesp32 -o x$XTENSA_BOARD_ESP = esp32s3; then
+  HAVE_XTENSA_OPENOCD_TRUE=
+  HAVE_XTENSA_OPENOCD_FALSE='#'
+else
+  HAVE_XTENSA_OPENOCD_TRUE='#'
+  HAVE_XTENSA_OPENOCD_FALSE=
+fi
+
+ if test x$XTENSA_BOARD_ESP = xesp32 -o x$XTENSA_BOARD_ESP = esp32s3; then
+  HAVE_XTENSA_WINDOWED_TRUE=
+  HAVE_XTENSA_WINDOWED_FALSE='#'
+else
+  HAVE_XTENSA_WINDOWED_TRUE='#'
+  HAVE_XTENSA_WINDOWED_FALSE=
 fi
 
 
@@ -6005,6 +6067,10 @@ if test -z "${SPARC_BUILD_SLITE_TRUE}" && test -z "${SPARC_BUILD_SLITE_FALSE}"; 
   as_fn_error $? "conditional \"SPARC_BUILD_SLITE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
+if test -z "${HAVE_XTENSA_BOARD_ESP8266_TRUE}" && test -z "${HAVE_XTENSA_BOARD_ESP8266_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_XTENSA_BOARD_ESP8266\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${HAVE_XTENSA_BOARD_ESP32_TRUE}" && test -z "${HAVE_XTENSA_BOARD_ESP32_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_XTENSA_BOARD_ESP32\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -6015,6 +6081,22 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_XTENSA_BOARD_ESP_TRUE}" && test -z "${HAVE_XTENSA_BOARD_ESP_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_XTENSA_BOARD_ESP\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_XTENSA_BOARDS_TRUE}" && test -z "${HAVE_XTENSA_BOARDS_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_XTENSA_BOARDS\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_XTENSA_QEMU_TRUE}" && test -z "${HAVE_XTENSA_QEMU_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_XTENSA_QEMU\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_XTENSA_OPENOCD_TRUE}" && test -z "${HAVE_XTENSA_OPENOCD_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_XTENSA_OPENOCD\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_XTENSA_WINDOWED_TRUE}" && test -z "${HAVE_XTENSA_WINDOWED_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_XTENSA_WINDOWED\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

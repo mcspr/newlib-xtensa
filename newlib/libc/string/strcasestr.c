@@ -67,10 +67,32 @@ QUICKREF
  */
 
 #include <sys/cdefs.h>
+#include <sys/pgmspace.h>
 
 #include <ctype.h>
 #include <string.h>
 #include <strings.h>
+
+/* str-two-way.h uses it to compare parts of the 'needle', strcasestr uses it for both 'haystack' and 'needle' */
+static int slow_strncasecmp(const char* s1, const char* s2, size_t n)
+{
+    int result = 0;
+
+    while (n > 0)
+    {
+        char ch1 = tolower(pgm_read_byte(s1++));
+        char ch2 = tolower(pgm_read_byte(s2++));
+        result = ch1 - ch2;
+        if (result != 0 || ch2 == '\0')
+        {
+            break;
+        }
+
+        n--;
+    }
+
+    return result;
+}
 
 #if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
 # define RETURN_TYPE char *
@@ -82,9 +104,13 @@ QUICKREF
 /* strncasecmp uses signed char, CMP_FUNC is expected to use unsigned char. */
 #pragma GCC diagnostic ignored "-Wpointer-sign"
 #endif
-# define CMP_FUNC strncasecmp
+#define _need_size_t
+#include <stddef.h>
+# define CMP_FUNC slow_strncasecmp
 # include "str-two-way.h"
 #endif
+
+/* ESP8266 - same as memchr, assume both 'haystack' and 'needle' require aligned reads */
 
 /*
  * Find the first occurrence of find in s, ignore case.
@@ -99,7 +125,7 @@ strcasestr (const char *s,
 	char c, sc;
 	size_t len;
 
-	if ((c = *find++) != 0) {
+	if ((c = pgm_read_byte(find++)) != 0) {
 		c = tolower((unsigned char)c);
 		len = strlen(find);
 		do {
@@ -107,7 +133,7 @@ strcasestr (const char *s,
 				if ((sc = *s++) == 0)
 					return (NULL);
 			} while ((char)tolower((unsigned char)sc) != c);
-		} while (strncasecmp(s, find, len) != 0);
+		} while (slow_strncasecmp (s, find, len) != 0);
 		s--;
 	}
 	return ((char *)s);
@@ -124,10 +150,19 @@ strcasestr (const char *s,
   /* Determine length of NEEDLE, and in the process, make sure
      HAYSTACK is at least as long (no point processing all of a long
      NEEDLE if HAYSTACK is too short).  */
-  while (*haystack && *needle)
-    ok &= (tolower ((unsigned char) *haystack++)
-	   == tolower ((unsigned char) *needle++));
-  if (*needle)
+  for (;;)
+  {
+    const unsigned char h = (const unsigned char)pgm_read_byte (haystack);
+    const unsigned char n = (const unsigned char)pgm_read_byte (needle);
+    if (!h || !n)
+      break;
+
+    ++haystack;
+    ++needle;
+
+    ok &= (tolower (h) == tolower (n));
+  }
+  if (pgm_read_byte (needle))
     return NULL;
   if (ok)
     return (char *) s;

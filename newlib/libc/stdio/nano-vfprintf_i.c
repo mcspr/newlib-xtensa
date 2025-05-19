@@ -44,6 +44,8 @@
 #include "vfieeefp.h"
 #include "nano-vfprintf_local.h"
 
+#include <sys/pgmspace.h>
+
 /* Decode and print non-floating point data.  */
 int
 _printf_common (struct _reent *data,
@@ -111,11 +113,13 @@ _printf_i (struct _reent *data, struct _prt_data_t *pdata, FILE *fp,
 {
   /* Field size expanded by dprec.  */
   int realsz;
-  u_quad_t _uquad;
+  u_oct_t _uoct;
   int base;
   int n;
   char *cp = pdata->buf + BUF;
-  char *xdigs = "0123456789ABCDEF";
+  static const char xdigsUC[] PROGMEM = "0123456789ABCDEF";
+  static const char xdigsLC[] PROGMEM = "0123456789abcdef";
+  const char *xdigs = xdigsLC;
 
   /* Decoding the conversion specifier.  */
   switch (pdata->code)
@@ -126,21 +130,22 @@ _printf_i (struct _reent *data, struct _prt_data_t *pdata, FILE *fp,
       goto non_number_nosign;
     case 'd':
     case 'i':
-      _uquad = SARG (pdata->flags);
-      if ((long) _uquad < 0)
+      _uoct = SARG (pdata->flags);
+      if ((long long) _uoct < 0)
 	{
-	  _uquad = -_uquad;
+	  _uoct = -_uoct;
 	  pdata->l_buf[0] = '-';
 	}
       base = 10;
       goto number;
     case 'u':
     case 'o':
-      _uquad = UARG (pdata->flags);
+      _uoct = UARG (pdata->flags);
       base = (pdata->code == 'o') ? 8 : 10;
       goto nosign;
     case 'X':
       pdata->l_buf[2] = 'X';
+      xdigs = xdigsUC;
       goto hex;
     case 'p':
       /*
@@ -156,15 +161,14 @@ _printf_i (struct _reent *data, struct _prt_data_t *pdata, FILE *fp,
       /* NOSTRICT.  */
     case 'x':
       pdata->l_buf[2] = 'x';
-      xdigs = "0123456789abcdef";
 hex:
-      _uquad = UARG (pdata->flags);
+      _uoct = UARG (pdata->flags);
       base = 16;
       if (pdata->flags & ALT)
 	pdata->flags |= HEXPREFIX;
 
       /* Leading 0x/X only if non-zero.  */
-      if (_uquad == 0)
+      if (_uoct == 0)
 	pdata->flags &= ~HEXPREFIX;
 
       /* Unsigned conversions.  */
@@ -184,14 +188,14 @@ number:
        * explicit precision of zero is no characters.''
        *	-- ANSI X3J11
        */
-      if (_uquad != 0 || pdata->prec != 0)
+      if (_uoct != 0 || pdata->prec != 0)
 	{
 	  do
 	    {
-	      *--cp = xdigs[_uquad % base];
-	      _uquad /= base;
+	      *--cp = pgm_read_byte(&xdigs[_uoct % base]);
+	      _uoct /= base;
 	    }
-	  while (_uquad);
+	  while (_uoct);
 	}
       /* For 'o' conversion, '#' increases the precision to force the first
 	 digit of the result to be zero.  */
@@ -205,11 +209,14 @@ number:
 	*GET_ARG (N, *ap, long_ptr_t) = pdata->ret;
       else if (pdata->flags & SHORTINT)
 	*GET_ARG (N, *ap, short_ptr_t) = pdata->ret;
+      else if (pdata->flags & CHARINT)
+	*GET_ARG (N, *ap, char_ptr_t) = pdata->ret;
       else
 	*GET_ARG (N, *ap, int_ptr_t) = pdata->ret;
     case '\0':
       pdata->size = 0;
       break;
+    case 'S': // TODO: Verify cap-S under Arduino is "PROGMEM char*", not wchar_t
     case 's':
       cp = GET_ARG (N, *ap, char_ptr_t);
       /* Precision gives the maximum number of chars to be written from a

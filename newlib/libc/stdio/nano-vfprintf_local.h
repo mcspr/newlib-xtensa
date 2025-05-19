@@ -113,6 +113,10 @@ extern char *_dtoa_r (struct _reent *, double, int,
 #define quad_t long
 #define u_quad_t unsigned long
 
+#define oct_t long long
+#define u_oct_t unsigned long long
+
+typedef oct_t *  oct_ptr_t;
 typedef quad_t * quad_ptr_t;
 typedef void *void_ptr_t;
 typedef char *   char_ptr_t;
@@ -140,8 +144,8 @@ typedef short *  short_ptr_t;
    sizeof (long long) = sizeof long > sizeof int.  */
 #define QUADINT		LONGINT
 #define FPT		0x400		/* Floating point number.  */
-/* Define as 0, to make SARG and UARG occupy fewer instructions.  */
-# define CHARINT	0
+#define LONGLONG	0x800		/* Long long */
+#define CHARINT		0x200
 
 /* Macros to support positional arguments.  */
 #define GET_ARG(n, ap, type) (va_arg ((ap), type))
@@ -150,15 +154,17 @@ typedef short *  short_ptr_t;
    argument extraction methods.  Also they should be used in nano-vfprintf_i.c
    and nano-vfprintf_float.c only, since ap is a pointer to va_list.  */
 #define	SARG(flags) \
-	(flags&LONGINT ? GET_ARG (N, (*ap), long) : \
-	    flags&SHORTINT ? (long)(short)GET_ARG (N, (*ap), int) : \
-	    flags&CHARINT ? (long)(signed char)GET_ARG (N, (*ap), int) : \
-	    (long)GET_ARG (N, (*ap), int))
+	(flags&LONGINT ? (long long)(long)GET_ARG (N, (*ap), long) : \
+	    flags&SHORTINT ? (long long)(short)GET_ARG (N, (*ap), int) : \
+	    flags&CHARINT ? (long long)(signed char)GET_ARG (N, (*ap), int) : \
+            flags&LONGLONG ? (long long)GET_ARG (N, (*ap), long long) : \
+	    (long long)GET_ARG (N, (*ap), int))
 #define	UARG(flags) \
-	(flags&LONGINT ? GET_ARG (N, (*ap), u_long) : \
-	    flags&SHORTINT ? (u_long)(u_short)GET_ARG (N, (*ap), int) : \
-	    flags&CHARINT ? (u_long)(unsigned char)GET_ARG (N, (*ap), int) : \
-	    (u_long)GET_ARG (N, (*ap), u_int))
+	(flags&LONGINT ? (unsigned long long)(u_long)GET_ARG (N, (*ap), u_long) : \
+	    flags&SHORTINT ? (unsigned long long)(u_short)GET_ARG (N, (*ap), int) : \
+	    flags&CHARINT ? (unsigned long long)(unsigned char)GET_ARG (N, (*ap), int) : \
+	    flags&LONGLONG ? (unsigned long long)GET_ARG (N, (*ap), unsigned long long) : \
+	    (unsigned long long)GET_ARG (N, (*ap), u_int))
 
 /* BEWARE, these `goto error' on error. And they are used
    in more than one functions.

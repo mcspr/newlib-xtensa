@@ -135,6 +135,7 @@ THIS SOFTWARE.
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/pgmspace.h>
 #include "mprec.h"
 #include "gdtoa.h"
 #include "../locale/setlocale.h"
@@ -151,7 +152,7 @@ THIS SOFTWARE.
 #undef tinytens
 /* The factor of 2^106 in tinytens[4] helps us avoid setting the underflow */
 /* flag unnecessarily.  It leads to a song and dance at the end of strtod. */
-static const double tinytens[] = { 1e-16, 1e-32,
+static const double tinytens[] PROGMEM = { 1e-16, 1e-32,
 #ifdef _DOUBLE_IS_32BITS
 				    0.0, 0.0, 0.0
 #else
@@ -298,7 +299,7 @@ _strtod_l (struct _reent *ptr, const char *__restrict s00, char **__restrict se,
 	if (*s == '0') {
 #ifndef NO_HEX_FP
 		{
-		static const FPI fpi = { 53, 1-1023-53+1, 2046-1023-53+1, 1, SI };
+		static const FPI fpi PROGMEM = { 53, 1-1023-53+1, 2046-1023-53+1, 1, SI };
 		Long exp;
 		__ULong bits[2];
 		switch(s[1]) {
@@ -430,7 +431,7 @@ _strtod_l (struct _reent *ptr, const char *__restrict s00, char **__restrict se,
 #ifdef INFNAN_CHECK
 			/* Check for Nan and Infinity */
 			__ULong bits[2];
-			static const FPI fpinan =	/* only 52 explicit bits */
+			static const FPI fpinan PROGMEM =	/* only 52 explicit bits */
 				{ 52, 1-1023-53+1, 2046-1023-53+1, 1, SI };
 			if (!decpt)
 			 switch(c) {

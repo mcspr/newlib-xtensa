@@ -46,5 +46,5 @@ No OS subroutines are required.
 int
 isalnum (int c)
 {
-	return(__CTYPE_PTR[c+1] & (_U|_L|_N));
+	return(pgm_read_byte(&__CTYPE_PTR[c+1]) & (_U|_L|_N));
 }

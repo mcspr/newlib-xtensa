@@ -320,6 +320,11 @@ __SVFSCANF_R (struct _reent *rptr,
 	scan_data.flags |= (SHORT << (cp - p));
 	fmt++;
       }
+      if ((scan_data.flags & SHORT) && (*fmt == 'h')) {
+        scan_data.flags &= ~SHORT;
+        scan_data.flags |= CHAR;
+        fmt++;
+      }
 
       /* Switch on the format.  continue if done; break once format
 	 type is derived.  */
@@ -377,6 +382,8 @@ __SVFSCANF_R (struct _reent *rptr,
 	    *GET_ARG (N, ap_copy, short *) = scan_data.nread;
 	  else if (scan_data.flags & LONG)
 	    *GET_ARG (N, ap_copy, long *) = scan_data.nread;
+	  else if (scan_data.flags & CHAR)
+	    *GET_ARG (N, ap_copy, char *) = scan_data.nread;
 	  else
 	    *GET_ARG (N, ap_copy, int *) = scan_data.nread;
 

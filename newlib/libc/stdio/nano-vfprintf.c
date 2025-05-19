@@ -168,6 +168,8 @@ static char *rcsid = "$Id$";
 #include "vfieeefp.h"
 #include "nano-vfprintf_local.h"
 
+#include <sys/pgmspace.h>
+
 /* The __ssputs_r function is shared between all versions of vfprintf
    and vfwprintf.  */
 #ifdef STRING_ONLY
@@ -228,7 +230,7 @@ __ssputs_r (struct _reent *ptr,
   if (len < w)
     w = len;
 
-  (void)memmove ((void *) fp->_p, (void *) buf, (size_t) (w));
+  (void)memcpy ((void *) fp->_p, (void *) buf, (size_t) (w));
   fp->_w -= w;
   fp->_p += w;
   return 0;
@@ -319,7 +321,7 @@ __ssprint_r (struct _reent *ptr,
       if (len < w)
 	w = len;
 
-      (void)memmove ((void *) fp->_p, (void *) p, (size_t) (w));
+      (void)memcpy ((void *) fp->_p, (void *) p, (size_t) (w));
       fp->_w -= w;
       fp->_p += w;
       /* Pretend we copied all.  */
@@ -425,7 +427,7 @@ __sfputs_r (struct _reent *ptr,
       for (i = 0; i < len; i++)
 	{
 	  /* Call __sfputc_r to skip _fputc_r.  */
-	  if (__sfputc_r (ptr, (int)buf[i], fp) == EOF)
+	  if (__sfputc_r (ptr, (int)pgm_read_byte(&buf[i]), fp) == EOF)
 	    return -1;
 	}
     }
@@ -520,7 +522,7 @@ _VFPRINTF_R (struct _reent *data,
   for (;;)
     {
       cp = fmt;
-      while (*fmt != '\0' && *fmt != '%')
+      while (pgm_read_byte(fmt) != '\0' && pgm_read_byte(fmt) != '%')
 	fmt += 1;
 
       if ((m = fmt - cp) != 0)
@@ -528,7 +530,7 @@ _VFPRINTF_R (struct _reent *data,
 	  PRINT (cp, m);
 	  prt_data.ret += m;
 	}
-      if (*fmt == '\0')
+      if (pgm_read_byte(fmt) == '\0')
 	goto done;
 
       fmt++;		/* Skip over '%'.  */
@@ -548,7 +550,7 @@ _VFPRINTF_R (struct _reent *data,
        *	-- ANSI X3J11
        */
       flag_chars = "#-0+ ";
-      for (; cp = memchr (flag_chars, *fmt, 5); fmt++)
+      for (; cp = memchr (flag_chars, pgm_read_byte(fmt), 5); fmt++)
 	prt_data.flags |= (1 << (cp - flag_chars));
 
       if (prt_data.flags & SPACESGN)
@@ -563,7 +565,7 @@ _VFPRINTF_R (struct _reent *data,
 	prt_data.l_buf[0] = '+';
 
       /* The width.  */
-      if (*fmt == '*')
+      if (pgm_read_byte(fmt) == '*')
 	{
 	  /*
 	   * ``A negative field width argument is taken as a
@@ -581,15 +583,15 @@ _VFPRINTF_R (struct _reent *data,
 	}
       else
         {
-	  for (; is_digit (*fmt); fmt++)
-	    prt_data.width = 10 * prt_data.width + to_digit (*fmt);
+	  for (; is_digit (pgm_read_byte(fmt)); fmt++)
+	    prt_data.width = 10 * prt_data.width + to_digit (pgm_read_byte(fmt));
 	}
 
       /* The precision.  */
-      if (*fmt == '.')
+      if (pgm_read_byte(fmt) == '.')
 	{
 	  fmt++;
-	  if (*fmt == '*')
+	  if (pgm_read_byte(fmt) == '*')
 	    {
 	      fmt++;
 	      prt_data.prec = GET_ARG (n, ap_copy, int);
@@ -599,21 +601,47 @@ _VFPRINTF_R (struct _reent *data,
 	  else
 	    {
 	      prt_data.prec = 0;
-	      for (; is_digit (*fmt); fmt++)
-		prt_data.prec = 10 * prt_data.prec + to_digit (*fmt);
+	      for (; is_digit (pgm_read_byte(fmt)); fmt++)
+		prt_data.prec = 10 * prt_data.prec + to_digit (pgm_read_byte(fmt));
 	    }
 	}
 
       /* The length modifiers.  */
       flag_chars = "hlL";
-      if ((cp = memchr (flag_chars, *fmt, 3)) != NULL)
+      if ((cp = memchr (flag_chars, pgm_read_byte(fmt), 3)) != NULL)
 	{
 	  prt_data.flags |= (SHORTINT << (cp - flag_chars));
 	  fmt++;
 	}
+      /* Handle ll case */
+      if ((prt_data.flags & LONGINT) && (pgm_read_byte(fmt) == 'l'))
+        {
+          prt_data.flags |= LONGLONG;
+          prt_data.flags &= ~LONGINT;
+          fmt++;
+        }
+      /* Handle hh case */
+      if ((prt_data.flags & SHORTINT) && (pgm_read_byte(fmt) == 'h'))
+        {
+          prt_data.flags |= CHARINT;
+          prt_data.flags &= ~SHORTINT;
+          fmt++;
+        }
+
+      /* Convert %z and %t into a no-op as size_t == int on ESP8266 */
+      if ((pgm_read_byte(fmt) == 'z') || (pgm_read_byte(fmt) == 't'))
+        {
+          fmt++;
+        }
+      /* Convert %j to a ll */
+      if (pgm_read_byte(fmt) == 'j')
+        {
+          prt_data.flags |= LONGLONG;
+          fmt++;
+        }
 
       /* The conversion specifiers.  */
-      prt_data.code = *fmt++;
+      prt_data.code = pgm_read_byte(fmt++);
       cp = memchr ("efgEFG", prt_data.code, 6);
 #ifdef FLOATING_POINT
       /* If cp is not NULL, we are facing FLOATING POINT NUMBER.  */

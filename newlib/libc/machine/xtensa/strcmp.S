@@ -1,3 +1,5 @@
+// ESP8266 has this in ROM
+#if 0
 /* ANSI C standard library function strcmp.
 
    Copyright (c) 2001-20012 Tensilica Inc.
@@ -351,3 +353,4 @@ strcmp:
 #endif /* !__XTENSA_EB */
 
 	.size	strcmp, . - strcmp
+#endif

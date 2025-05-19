@@ -92,4 +92,3 @@ memcmp (const void *m1,
   return 0;
 #endif /* not PREFER_SIZE_OVER_SPEED */
 }
-

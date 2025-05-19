@@ -46,5 +46,5 @@ No supporting OS subroutines are required.
 int
 isxdigit (int c)
 {
-	return(__CTYPE_PTR[c+1] & ((_X)|(_N)));
+	return(pgm_read_byte(&__CTYPE_PTR[c+1]) & ((_X)|(_N)));
 }

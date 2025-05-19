@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <syscalls.h>
 #include <sys/stat.h>
+#include <reent.h>
 #include <soc/uart.h>
 
 #if defined (OPENOCD_SEMIHOSTING) || (QEMU_SEMIHOSTING)
@@ -124,7 +125,6 @@ _write (int fd, const char *buf, size_t cnt)
     return ret;
 }
 
-
 /* Do not compile functions with common implementation
  * if building semihosting library
  */
@@ -180,12 +180,12 @@ void *
 __WEAK_FUNCTION_ATTR__
 _sbrk (int incr)
 {
-    extern char   end; /* Set by linker.  */
+    extern char   _heap_end; /* Set by linker.  */
     static char * heap_end;
     char *        prev_heap_end;
 
     if (heap_end == 0) {
-        heap_end = & end;
+        heap_end = & _heap_end;
     }
 
     prev_heap_end = heap_end;

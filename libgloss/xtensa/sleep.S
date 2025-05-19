@@ -35,8 +35,10 @@ usleep:
 	mov.n	a7, a1
 	s32i.n	a2, a7, 0
 
-	/* convert time to CLOCK ticks per 1us */
-	movi	a6, CPU_FREQUENCY_MHZ // CPU_FREQUENCY_MHZ == ticks per us
+	/* convert time to CLOCK ticks per 1us
+       esp8266 - instead of static CPU_FREQUENCY, load const returned by ROM ets_get_cpu_frequency */
+	movi    a6, 0x3fffc704
+	l32i	a6, a6, 0
 	mull	a2, a2, a6
 
 	/*

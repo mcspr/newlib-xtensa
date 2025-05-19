@@ -45,5 +45,5 @@ No supporting OS subroutines are required.
 int
 islower (int c)
 {
-	return ((__CTYPE_PTR[c+1] & (_U|_L)) == _L);
+	return ((pgm_read_byte(&__CTYPE_PTR[c+1]) & (_U|_L)) == _L);
 }

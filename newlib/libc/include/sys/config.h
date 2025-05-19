@@ -189,6 +189,16 @@
 #define __CUSTOM_FILE_IO__
 #endif
 
+#ifdef __XTENSA__
+#include <xtensa/config/core-isa.h>
+#define MALLOC_ALIGNMENT ((XCHAL_DATA_WIDTH) < 16 ? 16 : (XCHAL_DATA_WIDTH))
+/* esp8266-specific: shrink the default fd buffer size */
+#define __BUFSIZ__ 128
+#define _REENT_SMALL
+#define _READ_WRITE_RETURN_TYPE int
+#define _READ_WRITE_BUFSIZE_TYPE int
+#endif
+
 #if defined(__or1k__) || defined(__or1knd__)
 #define __DYNAMIC_REENT__
 #endif

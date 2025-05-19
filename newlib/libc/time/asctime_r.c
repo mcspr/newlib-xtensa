@@ -4,15 +4,16 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <sys/pgmspace.h>
 
 char *
 asctime_r (const struct tm *__restrict tim_p,
 	char *__restrict result)
 {
-  static const char day_name[7][3] = {
+  static const char day_name[7][3] PROGMEM = {
 	"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
   };
-  static const char mon_name[12][3] = {
+  static const char mon_name[12][3] PROGMEM = {
 	"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   };

@@ -25,8 +25,5 @@
 #include <stddef.h>
 #include <sys/string.h>
 
-void *
-memmove_P(void * __restrict dest, const void * __restrict src, size_t n)
-{
-    return memcpy_P(dest, src, n);
-}
+void * __attribute__((alias("memcpy_P")))
+memmove_P(void * __restrict dest, const void * __restrict src, size_t n);

@@ -1,5 +1,3 @@
-// ESP8266 has this in ROM
-#if 0
 /* ANSI C standard library function memcpy.
 
    Copyright (c) 2002-2008 Tensilica Inc.
@@ -343,4 +341,3 @@ memcpy:
 	.end schedule
 
 	.size	memcpy, . - memcpy
-#endif

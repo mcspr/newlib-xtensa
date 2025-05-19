@@ -633,7 +633,6 @@ check_PROGRAMS =
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/memcmp_P.c \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/memcpy_P.c \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/memmem_P.c \
-@HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/memmove_P.c \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/strncasecmp_P.c \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/strncat_P.c \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/strncmp_P.c \
@@ -1946,7 +1945,6 @@ am__objects_51 = libc/ssp/libc_a-chk_fail.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-memcmp_P.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-memcpy_P.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-memmem_P.$(OBJEXT) \
-@HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-memmove_P.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-strncasecmp_P.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-strncat_P.$(OBJEXT) \
 @HAVE_LIBC_SYS_XTENSA_DIR_TRUE@	libc/sys/xtensa/libc_a-strncmp_P.$(OBJEXT) \
@@ -8169,9 +8167,6 @@ libc/sys/xtensa/libc_a-memcpy_P.$(OBJEXT):  \
 libc/sys/xtensa/libc_a-memmem_P.$(OBJEXT):  \
 	libc/sys/xtensa/$(am__dirstamp) \
 	libc/sys/xtensa/$(DEPDIR)/$(am__dirstamp)
-libc/sys/xtensa/libc_a-memmove_P.$(OBJEXT):  \
-	libc/sys/xtensa/$(am__dirstamp) \
-	libc/sys/xtensa/$(DEPDIR)/$(am__dirstamp)
 libc/sys/xtensa/libc_a-strncasecmp_P.$(OBJEXT):  \
 	libc/sys/xtensa/$(am__dirstamp) \
 	libc/sys/xtensa/$(DEPDIR)/$(am__dirstamp)
@@ -14345,7 +14340,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-memcmp_P.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-memcpy_P.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-memmem_P.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-stdio_pgmspace.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-strncasecmp_P.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@libc/sys/xtensa/$(DEPDIR)/libc_a-strncat_P.Po@am__quote@
@@ -33584,20 +33578,6 @@ libc/sys/xtensa/libc_a-memmem_P.obj: libc/sys/xtensa/memmem_P.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/sys/xtensa/memmem_P.c' object='libc/sys/xtensa/libc_a-memmem_P.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/sys/xtensa/libc_a-memmem_P.obj `if test -f 'libc/sys/xtensa/memmem_P.c'; then $(CYGPATH_W) 'libc/sys/xtensa/memmem_P.c'; else $(CYGPATH_W) '$(srcdir)/libc/sys/xtensa/memmem_P.c'; fi`
-
-libc/sys/xtensa/libc_a-memmove_P.o: libc/sys/xtensa/memmove_P.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/sys/xtensa/libc_a-memmove_P.o -MD -MP -MF libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Tpo -c -o libc/sys/xtensa/libc_a-memmove_P.o `test -f 'libc/sys/xtensa/memmove_P.c' || echo '$(srcdir)/'`libc/sys/xtensa/memmove_P.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Tpo libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/sys/xtensa/memmove_P.c' object='libc/sys/xtensa/libc_a-memmove_P.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/sys/xtensa/libc_a-memmove_P.o `test -f 'libc/sys/xtensa/memmove_P.c' || echo '$(srcdir)/'`libc/sys/xtensa/memmove_P.c
-
-libc/sys/xtensa/libc_a-memmove_P.obj: libc/sys/xtensa/memmove_P.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/sys/xtensa/libc_a-memmove_P.obj -MD -MP -MF libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Tpo -c -o libc/sys/xtensa/libc_a-memmove_P.obj `if test -f 'libc/sys/xtensa/memmove_P.c'; then $(CYGPATH_W) 'libc/sys/xtensa/memmove_P.c'; else $(CYGPATH_W) '$(srcdir)/libc/sys/xtensa/memmove_P.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Tpo libc/sys/xtensa/$(DEPDIR)/libc_a-memmove_P.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/sys/xtensa/memmove_P.c' object='libc/sys/xtensa/libc_a-memmove_P.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/sys/xtensa/libc_a-memmove_P.obj `if test -f 'libc/sys/xtensa/memmove_P.c'; then $(CYGPATH_W) 'libc/sys/xtensa/memmove_P.c'; else $(CYGPATH_W) '$(srcdir)/libc/sys/xtensa/memmove_P.c'; fi`
 
 libc/sys/xtensa/libc_a-strncasecmp_P.o: libc/sys/xtensa/strncasecmp_P.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/sys/xtensa/libc_a-strncasecmp_P.o -MD -MP -MF libc/sys/xtensa/$(DEPDIR)/libc_a-strncasecmp_P.Tpo -c -o libc/sys/xtensa/libc_a-strncasecmp_P.o `test -f 'libc/sys/xtensa/strncasecmp_P.c' || echo '$(srcdir)/'`libc/sys/xtensa/strncasecmp_P.c

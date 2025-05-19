@@ -8,7 +8,6 @@ libc_a_SOURCES += \
 	%D%/memcmp_P.c \
 	%D%/memcpy_P.c \
 	%D%/memmem_P.c \
-	%D%/memmove_P.c \
 	%D%/strncasecmp_P.c \
 	%D%/strncat_P.c \
 	%D%/strncmp_P.c \

@@ -24,10 +24,14 @@ extern "C" {
 
 int	memcmp_P(const void *, const void *, size_t);
 void *memmem_P(const void *, size_t, const void *, size_t);
-void *memcpy_P(void * __restrict, const void * __restrict, size_t);
-void *memmove_P(void * __restrict, const void * __restrict, size_t);
 void *memccpy_P(void * __restrict, const void * __restrict, int, size_t);
 void *memchr_P(const void *, int, size_t);
+
+void *memcpy_P(void * __restrict, const void * __restrict, size_t);
+static inline void *memmove_P(void *__restrict dest, const void *__restrict src, size_t n)
+{
+    return memcpy_P(dest, src, n);
+}
 
 char	*strncpy_P(char *__restrict, const char *__restrict, size_t);
 static inline char *strcpy_P(char *__restrict dest, const char *__restrict src)

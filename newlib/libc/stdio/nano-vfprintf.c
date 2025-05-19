@@ -206,7 +206,7 @@ __ssputs_r (struct _reent *ptr,
 	      _REENT_ERRNO(ptr) = ENOMEM;
 	      goto err;
 	    }
-	  memcpy (str, fp->_bf._base, curpos);
+	  memmove (str, fp->_bf._base, curpos);
 	  fp->_flags = (fp->_flags & ~__SOPT) | __SMBF;
 	}
       else
@@ -230,7 +230,7 @@ __ssputs_r (struct _reent *ptr,
   if (len < w)
     w = len;
 
-  (void)memcpy ((void *) fp->_p, (void *) buf, (size_t) (w));
+  (void)memmove ((void *) fp->_p, (void *) buf, (size_t) (w));
   fp->_w -= w;
   fp->_p += w;
   return 0;

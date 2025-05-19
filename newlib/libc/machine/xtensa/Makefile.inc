@@ -8,7 +8,7 @@ libc_a_SOURCES += \
 libc_a_SOURCES += \
 	%D%/atexit.c \
 	%D%/bzero.S \
-	%D%/time.c
+	%D%/time.S
 
 if XTENSA_ESP32_PSRAM_CACHE_FIX
 libc_a_CPPFLAGS_%C% = \

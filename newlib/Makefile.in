@@ -959,7 +959,7 @@ check_PROGRAMS =
 @HAVE_LIBC_MACHINE_XTENSA_TRUE@	libc/machine/xtensa/setjmp.S \
 @HAVE_LIBC_MACHINE_XTENSA_TRUE@	libc/machine/xtensa/atexit.c \
 @HAVE_LIBC_MACHINE_XTENSA_TRUE@	libc/machine/xtensa/bzero.S \
-@HAVE_LIBC_MACHINE_XTENSA_TRUE@	libc/machine/xtensa/time.c
+@HAVE_LIBC_MACHINE_XTENSA_TRUE@	libc/machine/xtensa/time.S
 @HAVE_LIBC_MACHINE_Z8K_TRUE@am__append_133 = libc/machine/z8k/setjmp.S libc/machine/z8k/memset.S libc/machine/z8k/memcpy.S libc/machine/z8k/memmove.S libc/machine/z8k/memcmp.S
 @NEWLIB_HW_FP_TRUE@am__append_134 = $(libm_mathfp_src) $(libm_mathfp_fsrc)
 @NEWLIB_HW_FP_TRUE@am__append_135 = \
@@ -20255,6 +20255,20 @@ libc/machine/xtensa/libc_a-bzero.obj: libc/machine/xtensa/bzero.S
 @AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -c -o libc/machine/xtensa/libc_a-bzero.obj `if test -f 'libc/machine/xtensa/bzero.S'; then $(CYGPATH_W) 'libc/machine/xtensa/bzero.S'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/bzero.S'; fi`
 
+libc/machine/xtensa/libc_a-time.o: libc/machine/xtensa/time.S
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -MT libc/machine/xtensa/libc_a-time.o -MD -MP -MF libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo -c -o libc/machine/xtensa/libc_a-time.o `test -f 'libc/machine/xtensa/time.S' || echo '$(srcdir)/'`libc/machine/xtensa/time.S
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo libc/machine/xtensa/$(DEPDIR)/libc_a-time.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='libc/machine/xtensa/time.S' object='libc/machine/xtensa/libc_a-time.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -c -o libc/machine/xtensa/libc_a-time.o `test -f 'libc/machine/xtensa/time.S' || echo '$(srcdir)/'`libc/machine/xtensa/time.S
+
+libc/machine/xtensa/libc_a-time.obj: libc/machine/xtensa/time.S
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -MT libc/machine/xtensa/libc_a-time.obj -MD -MP -MF libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo -c -o libc/machine/xtensa/libc_a-time.obj `if test -f 'libc/machine/xtensa/time.S'; then $(CYGPATH_W) 'libc/machine/xtensa/time.S'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/time.S'; fi`
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo libc/machine/xtensa/$(DEPDIR)/libc_a-time.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='libc/machine/xtensa/time.S' object='libc/machine/xtensa/libc_a-time.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -c -o libc/machine/xtensa/libc_a-time.obj `if test -f 'libc/machine/xtensa/time.S'; then $(CYGPATH_W) 'libc/machine/xtensa/time.S'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/time.S'; fi`
+
 libc/machine/z8k/libc_a-setjmp.o: libc/machine/z8k/setjmp.S
 @am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CCASFLAGS) $(CCASFLAGS) -MT libc/machine/z8k/libc_a-setjmp.o -MD -MP -MF libc/machine/z8k/$(DEPDIR)/libc_a-setjmp.Tpo -c -o libc/machine/z8k/libc_a-setjmp.o `test -f 'libc/machine/z8k/setjmp.S' || echo '$(srcdir)/'`libc/machine/z8k/setjmp.S
 @am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) libc/machine/z8k/$(DEPDIR)/libc_a-setjmp.Tpo libc/machine/z8k/$(DEPDIR)/libc_a-setjmp.Po
@@ -37322,20 +37336,6 @@ libc/machine/xtensa/libc_a-atexit.obj: libc/machine/xtensa/atexit.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/machine/xtensa/atexit.c' object='libc/machine/xtensa/libc_a-atexit.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/machine/xtensa/libc_a-atexit.obj `if test -f 'libc/machine/xtensa/atexit.c'; then $(CYGPATH_W) 'libc/machine/xtensa/atexit.c'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/atexit.c'; fi`
-
-libc/machine/xtensa/libc_a-time.o: libc/machine/xtensa/time.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/machine/xtensa/libc_a-time.o -MD -MP -MF libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo -c -o libc/machine/xtensa/libc_a-time.o `test -f 'libc/machine/xtensa/time.c' || echo '$(srcdir)/'`libc/machine/xtensa/time.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo libc/machine/xtensa/$(DEPDIR)/libc_a-time.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/machine/xtensa/time.c' object='libc/machine/xtensa/libc_a-time.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/machine/xtensa/libc_a-time.o `test -f 'libc/machine/xtensa/time.c' || echo '$(srcdir)/'`libc/machine/xtensa/time.c
-
-libc/machine/xtensa/libc_a-time.obj: libc/machine/xtensa/time.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/machine/xtensa/libc_a-time.obj -MD -MP -MF libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo -c -o libc/machine/xtensa/libc_a-time.obj `if test -f 'libc/machine/xtensa/time.c'; then $(CYGPATH_W) 'libc/machine/xtensa/time.c'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/time.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/machine/xtensa/$(DEPDIR)/libc_a-time.Tpo libc/machine/xtensa/$(DEPDIR)/libc_a-time.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/machine/xtensa/time.c' object='libc/machine/xtensa/libc_a-time.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/machine/xtensa/libc_a-time.obj `if test -f 'libc/machine/xtensa/time.c'; then $(CYGPATH_W) 'libc/machine/xtensa/time.c'; else $(CYGPATH_W) '$(srcdir)/libc/machine/xtensa/time.c'; fi`
 
 libm/mathfp/libm_a-s_acos.o: libm/mathfp/s_acos.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libm_a_CPPFLAGS) $(CPPFLAGS) $(libm_a_CFLAGS) $(CFLAGS) -MT libm/mathfp/libm_a-s_acos.o -MD -MP -MF libm/mathfp/$(DEPDIR)/libm_a-s_acos.Tpo -c -o libm/mathfp/libm_a-s_acos.o `test -f 'libm/mathfp/s_acos.c' || echo '$(srcdir)/'`libm/mathfp/s_acos.c

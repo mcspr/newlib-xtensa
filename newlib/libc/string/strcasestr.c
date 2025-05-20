@@ -130,7 +130,7 @@ strcasestr (const char *s,
 		len = strlen(find);
 		do {
 			do {
-				if ((sc = *s++) == 0)
+				if ((sc = pgm_read_byte(s++)) == 0)
 					return (NULL);
 			} while ((char)tolower((unsigned char)sc) != c);
 		} while (slow_strncasecmp (s, find, len) != 0);

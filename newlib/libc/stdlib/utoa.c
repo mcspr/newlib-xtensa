@@ -33,7 +33,7 @@ __utoa (unsigned value,
         char *str,
         int base)
 {
-  static const char digits[] PROGMEM = "0123456789abcdefghijklmnopqrstuvwxyz";
+  static const char digits[] PSTR_ATTR = "0123456789abcdefghijklmnopqrstuvwxyz";
   int i, j;
   unsigned remainder;
   char c;

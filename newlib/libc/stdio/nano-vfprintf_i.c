@@ -117,8 +117,8 @@ _printf_i (struct _reent *data, struct _prt_data_t *pdata, FILE *fp,
   int base;
   int n;
   char *cp = pdata->buf + BUF;
-  static const char xdigsUC[] PROGMEM = "0123456789ABCDEF";
-  static const char xdigsLC[] PROGMEM = "0123456789abcdef";
+  static const char xdigsUC[] PSTR_ATTR = "0123456789ABCDEF";
+  static const char xdigsLC[] PSTR_ATTR = "0123456789abcdef";
   const char *xdigs = xdigsLC;
 
   /* Decoding the conversion specifier.  */

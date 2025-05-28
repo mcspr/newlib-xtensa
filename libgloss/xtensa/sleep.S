@@ -4,6 +4,7 @@
  */
 
 #include <soc/cpu.h>
+#include "../../newlib/libc/machine/xtensa/xtensa-asm.h"
 
 #define USECONDS_IN_SECOND 1000000
 
@@ -11,7 +12,7 @@
 	.align	4
 	.global sleep
 sleep:
-	entry	a1, 0x30
+	leaf_entry	a1, 0x30
 	mov.n	a7, a1
 	s32i.n	a2, a7, 0
 
@@ -24,14 +25,14 @@ sleep:
 
 .Lsleep_exit:
 	s32i.n	a2, a7, 0
-	retw
+	leaf_return
 
 
 	.type	usleep, @function
 	.align	4
 	.global usleep
 usleep:
-	entry	a1, 0x30
+	leaf_entry	a1, 0x30
 	mov.n	a7, a1
 	s32i.n	a2, a7, 0
 
@@ -67,5 +68,5 @@ usleep:
 	j	.Lusleep_waitloop
 .Lusleep_exit:
 	s32i.n	a2, a7, 0
-	retw
+	leaf_return
 

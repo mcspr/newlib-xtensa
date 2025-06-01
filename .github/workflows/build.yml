@@ -46,3 +46,20 @@ jobs:
           --disable-option-checking \
           --disable-shared
         make -j$(nproc) all
+
+    - name: Archive
+      run: |
+        mkdir -p $HOME/archive
+        make DESTDIR=$HOME/archive install
+        pushd $HOME
+        time zip \
+          --quiet \
+          --recurse-paths \
+          newlib-${{ github.sha }}.zip archive/
+        popd
+        mv $HOME/newlib-${{ github.sha }}.zip ./
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: newlib-${{ github.sha }}
+        path: newlib-${{ github.sha }}.zip

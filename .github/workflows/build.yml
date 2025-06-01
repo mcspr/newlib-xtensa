@@ -51,7 +51,7 @@ jobs:
       run: |
         export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH
 
-        for t in . newlib libgloss ; do
+        for t in . xtensa-lx106-elf/newlib xtensa-lx106-elf/libgloss ; do
           mkdir -p $HOME/archive/build-$t
           cp -v $t/config.log $t/config.status $t/Makefile $HOME/archive/build-$t/
         done

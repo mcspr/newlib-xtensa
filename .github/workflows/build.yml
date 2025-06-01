@@ -49,6 +49,7 @@ jobs:
 
     - name: Archive
       run: |
+        export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH
         mkdir -p $HOME/archive
         make DESTDIR=$HOME/archive install
         pushd $HOME

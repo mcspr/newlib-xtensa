@@ -50,14 +50,22 @@ jobs:
     - name: Archive
       run: |
         export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH
+
+        for t in . newlib libgloss ; do
+          mkdir -p $HOME/archive/build-$t
+          cp -v $t/config.log $t/config.status $t/Makefile $HOME/archive/build-$t/
+        done
+
         mkdir -p $HOME/archive
         make DESTDIR=$HOME/archive install
+
         pushd $HOME
         time zip \
           --quiet \
           --recurse-paths \
           newlib-${{ github.sha }}.zip archive/
         popd
+
         mv $HOME/newlib-${{ github.sha }}.zip ./
 
     - uses: actions/upload-artifact@v4

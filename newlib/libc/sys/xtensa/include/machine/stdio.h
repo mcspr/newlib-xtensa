@@ -1,6 +1,10 @@
 #ifndef _MACHINE_STDIO_H_
 #define _MACHINE_STDIO_H_
 
+#include <_ansi.h>
+
+#define __need_size_t
+#include <stddef.h>
 #include <stdarg.h>
 
 #ifdef __cplusplus
@@ -15,7 +19,7 @@ int     sprintf_P(char *str, const char *formatP, ...)
     _ATTRIBUTE ((__format__ (__printf__, 2, 3)));
 int     snprintf_P(char *str, size_t strSize, const char *formatP, ...)
     _ATTRIBUTE ((__format__ (__printf__, 3, 4)));
-int     vsnprintf_P(char *str, size_t strSize, const char *formatP, __VALIST)
+int     vsnprintf_P(char *str, size_t strSize, const char *formatP, va_list)
     _ATTRIBUTE ((__format__ (__printf__, 3, 0)));
 
 #ifdef __cplusplus

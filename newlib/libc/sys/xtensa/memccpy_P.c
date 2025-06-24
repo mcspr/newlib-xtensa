@@ -22,9 +22,14 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <stdint.h>
+#include <string.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 void *
 memccpy_P(void* dest, const void* src, int c, size_t count)
@@ -45,4 +50,3 @@ memccpy_P(void* dest, const void* src, int c, size_t count)
 
     return result;
 }
-

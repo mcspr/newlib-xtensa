@@ -1,10 +1,13 @@
-/* PGMSPACE.H - Accessor utilities/types for accessing PROGMEM data */
+/* Accessor utilities/types for accessing 32bit/16bit/8bit data using 32bit aligned loads
+ * pointers to data are never assumed to be aligned, funcs below correct offsets when needed
+ * using sys/pgmspace.h path for compatiblity and avr-libc legacy reasons */
 
 #ifndef _PGMSPACE_H_
 #define _PGMSPACE_H_
 
 #include <stdint.h>
 #include <sys/_pgmspace.h>
+#include <sys/_pgmspace_wchar.h>
 
 #ifdef __cplusplus
 extern "C" {

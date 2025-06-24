@@ -804,4 +804,6 @@ _END_STD_C
 #include <ssp/stdio.h>
 #endif
 
+#include <machine/stdio.h>
+
 #endif /* _STDIO_H_ */

@@ -1,4 +1,7 @@
+#include <string.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strstr(const char *haystack, const char *needle)

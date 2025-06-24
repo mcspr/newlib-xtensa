@@ -22,8 +22,11 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char*
 strncat_P(char* __restrict dest, const char* __restrict src, size_t size)

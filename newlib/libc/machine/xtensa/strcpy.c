@@ -1,4 +1,9 @@
+#include <string.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
+
+#undef strcpy
 
 char *
 strcpy(char *__restrict dest, const char *__restrict src)

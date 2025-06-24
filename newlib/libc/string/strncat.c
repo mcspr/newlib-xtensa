@@ -87,7 +87,7 @@ strncat (char *__restrict s1,
       if (n == 0)
 	*s1 = '\0';
     }
-	
+
   return s;
 #endif /* not PREFER_SIZE_OVER_SPEED */
 }

@@ -22,8 +22,11 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strnstr_P(const char *haystack, const char *needle, size_t haystack_len)
@@ -37,4 +40,3 @@ strnstr_P(const char *haystack, const char *needle, size_t haystack_len)
   }
   return NULL;
 }
-

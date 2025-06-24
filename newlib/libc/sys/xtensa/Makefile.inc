@@ -2,7 +2,10 @@ AM_CPPFLAGS_%C% = -I$(srcdir)/libc/machine/xtensa
 
 libc_a_SOURCES += \
 	%D%/lock.c \
-	%D%/stdio_pgmspace.c \
+	%D%/printf_P.c \
+	%D%/snprintf_P.c \
+	%D%/sprintf_P.c \
+	%D%/vsnprintf_P.c \
 	%D%/memccpy_P.c \
 	%D%/memchr_P.c \
 	%D%/memcmp_P.c \

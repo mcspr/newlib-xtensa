@@ -22,9 +22,13 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <stdint.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 void*
 memmem_P(const void* buf, size_t bufSize, const void* findP, size_t findPSize)

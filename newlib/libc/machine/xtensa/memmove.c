@@ -1,5 +1,11 @@
-#include <sys/string.h>
+#define __need_size_t
 #include <stddef.h>
+
+#include <string.h>
+#undef memmove
+
+#include <sys/string.h>
+#include <sys/pgmspace.h>
 
 void *
 memmove(void *dest, const void *src, size_t n)

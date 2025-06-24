@@ -27,9 +27,9 @@
 	.begin schedule
 	.align	4
 	.literal_position
-	.global	strlen
-	.type	strlen, @function
-strlen:
+	.global	__fast_strlen
+	.type	__fast_strlen, @function
+__fast_strlen:
 	leaf_entry sp, 16
 	/* a2 = s */
 
@@ -112,4 +112,4 @@ strlen:
 
 	.end schedule
 
-	.size	strlen, . - strlen
+	.size	__fast_strlen, . - __fast_strlen

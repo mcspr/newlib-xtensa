@@ -75,7 +75,7 @@ strcat (char *__restrict s1,
      s1 is much less likely to be aligned.  I don't know if its worth
      tweaking strcpy to handle this better.  */
   strcpy (s1, s2);
-	
+
   return s;
 #endif /* not PREFER_SIZE_OVER_SPEED */
 }

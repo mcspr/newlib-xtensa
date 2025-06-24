@@ -1,9 +1,28 @@
 libc_a_SOURCES += \
-	%D%/memccpy.c %D%/memchr.c %D%/memcmp.c %D%/memcpy.c \
-	%D%/memmove.c %D%/strcasecmp.c %D%/strcat.c %D%/strcmp.c \
-	%D%/strcpy.c %D%/strlen.c %D%/strncasecmp.c %D%/strncat.c \
-	%D%/strncmp.c %D%/strncpy.c %D%/strnlen.c %D%/strstr.c \
-	%D%/fast_strcpy.S %D%/fast_strncpy.S %D%/setjmp.S
+	%D%/memccpy.c \
+	%D%/memmove.c \
+	%D%/strcpy.c \
+	%D%/strncmp.c \
+	%D%/memchr.c \
+	%D%/memcmp.c \
+	%D%/memcpy.c \
+	%D%/mempcpy.c \
+	%D%/strcasecmp.c \
+	%D%/strcat.c \
+	%D%/strcmp.c \
+	%D%/strlen.c \
+	%D%/strncasecmp.c \
+	%D%/strncat.c \
+	%D%/strncpy.c \
+	%D%/strnlen.c \
+	%D%/strstr.c
+
+libc_a_SOURCES += \
+	%D%/fast_memcpy.S \
+	%D%/fast_strcpy.S \
+	%D%/fast_strlen.S \
+	%D%/fast_strncpy.S \
+	%D%/setjmp.S
 
 libc_a_SOURCES += \
 	%D%/atexit.c \

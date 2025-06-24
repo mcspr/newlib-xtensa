@@ -1,5 +1,9 @@
-#include <sys/string.h>
+#define __need_size_t
 #include <stddef.h>
+
+#include <string.h>
+#include <sys/string.h>
+#include <sys/pgmspace.h>
 
 int
 memcmp(const void *s1, const void *s2, size_t n)

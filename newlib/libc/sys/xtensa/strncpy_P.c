@@ -22,10 +22,14 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
-#include <stdbool.h>
+#define __need_size_t
 #include <stddef.h>
+
+#include <stdbool.h>
 #include <stdint.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strncpy_P(char* __restrict dest, const char* __restrict src, size_t size)

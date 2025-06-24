@@ -57,7 +57,7 @@
 	.begin schedule
 	.align	XCHAL_INST_FETCH_WIDTH
 	.literal_position
-__memcpy_aux:
+__fast_memcpy_aux:
 
 	/* Skip bytes to get proper alignment for three-byte loop */
 .skip XCHAL_INST_FETCH_WIDTH - 3
@@ -130,9 +130,9 @@ __memcpy_aux:
 
 
 	.align	4
-	.global	memcpy
-	.type	memcpy, @function
-memcpy:
+	.global	__fast_memcpy
+	.type	__fast_memcpy, @function
+__fast_memcpy:
 	leaf_entry sp, 16
 	/* a2 = dst, a3 = src, a4 = len */
 
@@ -340,4 +340,4 @@ memcpy:
 
 	.end schedule
 
-	.size	memcpy, . - memcpy
+	.size	__fast_memcpy, . - __fast_memcpy

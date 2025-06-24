@@ -22,9 +22,13 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
-#include <ctype.h>
+#define __need_size_t
 #include <stddef.h>
+
+#include <ctype.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 int
 strncasecmp_P(const char* s1, const char* s2, size_t size)
@@ -49,4 +53,3 @@ strncasecmp_P(const char* s1, const char* s2, size_t size)
 
     return result;
 }
-

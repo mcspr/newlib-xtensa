@@ -20,9 +20,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <stdint.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 size_t
 strnlen_P(const char* s, size_t size)

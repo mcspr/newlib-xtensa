@@ -1,8 +1,16 @@
+#include <string.h>
+#undef strcat
+
+char *
+newlib_strncat(char *, const char *__restrict, size_t)
+__attribute__((visibility("hidden")));
+
 #define strncat newlib_strncat
 #include "../../string/strncat.c"
 #undef strncat
 
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strncat(char *dest, const char *__restrict src, size_t n)

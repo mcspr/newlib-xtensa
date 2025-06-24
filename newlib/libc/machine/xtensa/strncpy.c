@@ -1,5 +1,10 @@
-#include <sys/string.h>
+#define __need_size_t
 #include <stddef.h>
+
+#include <string.h>
+
+#include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strncpy(char *__restrict dest, const char *__restrict src, size_t n)

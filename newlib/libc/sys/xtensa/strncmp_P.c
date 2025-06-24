@@ -22,8 +22,11 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 int
 strncmp_P(const char* s1, const char* s2, size_t size)

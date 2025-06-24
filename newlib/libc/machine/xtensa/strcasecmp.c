@@ -1,3 +1,10 @@
+#include <strings.h>
+#include <sys/string.h>
+
+int
+newlib_strcasecmp(const char *s1, const char *s2)
+__attribute__((visibility("hidden")));
+
 #define strcasecmp newlib_strcasecmp
 #include "../../string/strcasecmp.c"
 #undef strcasecmp

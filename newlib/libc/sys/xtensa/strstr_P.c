@@ -22,8 +22,11 @@
 
 // TODO - Optimize these routines to use 32-bit accesses whenever possible
 
+#define __need_size_t
 #include <stddef.h>
+
 #include <sys/string.h>
+#include <sys/pgmspace.h>
 
 char *
 strstr_P(const char* haystack, const char* needle)
@@ -38,7 +41,7 @@ strstr_P(const char* haystack, const char* needle)
 
     while (*haystack) {
         size_t i = 0;
-        while (true) {
+        for (;;) {
             char n = pgm_read_byte(pn + i);
             if (n == 0) {
                 return (char *) haystack;

@@ -490,6 +490,8 @@ typedef struct _FILE_DISPOSITION_INFORMATION_EX	// 64
   ULONG Flags;
 } FILE_DISPOSITION_INFORMATION_EX, *PFILE_DISPOSITION_INFORMATION_EX;
 
+#if __MINGW64_VERSION_MAJOR < 13
+
 typedef struct _FILE_STAT_INFORMATION		// 68
 {
   LARGE_INTEGER FileId;
@@ -509,6 +511,8 @@ typedef struct _FILE_CASE_SENSITIVE_INFORMATION	// 71
 {
   ULONG Flags;
 } FILE_CASE_SENSITIVE_INFORMATION, *PFILE_CASE_SENSITIVE_INFORMATION;
+
+#endif
 
 enum {
   FILE_LINK_REPLACE_IF_EXISTS				= 0x01,
@@ -1362,7 +1366,8 @@ typedef enum _THREADINFOCLASS
   ThreadBasicInformation = 0,
   ThreadTimes = 1,
   ThreadImpersonationToken = 5,
-  ThreadQuerySetWin32StartAddress = 9
+  ThreadQuerySetWin32StartAddress = 9,
+  ThreadSuspendCount = 35
 } THREADINFOCLASS, *PTHREADINFOCLASS;
 
 typedef struct _THREAD_BASIC_INFORMATION

@@ -198,11 +198,12 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
   class san *andreas;
   waitq wq;
   volatile int current_sig;
-  unsigned incyg;
+  volatile unsigned incyg;
   volatile unsigned stacklock;
   __tlsstack_t *stackptr;
   __tlsstack_t stack[TLS_STACK_SIZE];
   unsigned initialized;
+  volatile bool suspend_on_exception;
 
 public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
   void init_thread (void *, DWORD (*) (void *, void *));
@@ -242,8 +243,11 @@ public: /* Do NOT remove this public: line, it's a marker for gentls_offsets. */
   {
     while (InterlockedExchange (&stacklock, 1))
       {
-#ifdef __x86_64__
+#if defined(__x86_64__)
 	__asm__ ("pause");
+#elif defined(__aarch64__)
+	__asm__ ("dmb ishst\n"
+                 "yield");
 #else
 #error unimplemented for this target
 #endif
@@ -321,7 +325,13 @@ public:
        address of the _except block to restore the context correctly.
        See comment preceeding myfault_altstack_handler in exception.cc. */
     ret = (DWORD64) _ret;
+#if defined(__x86_64__)
     __asm__ volatile ("movq %%rsp,%0": "=o" (frame));
+#elif defined(__aarch64__)
+    __asm__ volatile ("mov %0, sp" : "=r" (frame));
+#else
+#error unimplemented for this target
+#endif
   }
   ~san () __attribute__ ((always_inline))
   {

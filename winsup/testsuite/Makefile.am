@@ -311,6 +311,10 @@ check_PROGRAMS = \
 	winsup.api/pthread/self2 \
 	winsup.api/pthread/threadidafterfork \
 	winsup.api/pthread/tsd1 \
+	winsup.api/posix_spawn/errors \
+	winsup.api/posix_spawn/fds \
+	winsup.api/posix_spawn/signals \
+	winsup.api/posix_spawn/spawnp \
 	winsup.api/samples/sample-fail \
 	winsup.api/samples/sample-pass
 # winsup.api/ltp/ulimit01 is omitted as we don't have <ulimit.h>

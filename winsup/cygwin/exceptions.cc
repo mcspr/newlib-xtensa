@@ -597,7 +597,7 @@ try_to_debug ()
     {
       extern void break_here ();
       break_here ();
-      return 1;
+      return 0;
     }
 
   /* Otherwise, invoke the JIT debugger, if set */
@@ -652,6 +652,13 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
 {
   static int NO_COPY debugging = 0;
   _cygtls& me = _my_tls;
+
+  if (me.suspend_on_exception)
+    {
+      SuspendThread (GetCurrentThread ());
+      if (e->ExceptionCode == (DWORD) STATUS_SINGLE_STEP)
+	return ExceptionContinueExecution;
+    }
 
   if (debugging && ++debugging < 500000)
     {
@@ -812,6 +819,8 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
   else if (try_to_debug ())
     {
       debugging = 1;
+      /* If a JIT debugger just attached, replay the exception for the benefit
+	 of that */
       return ExceptionContinueExecution;
     }
 
@@ -923,10 +932,40 @@ _cygtls::interrupt_now (CONTEXT *cx, siginfo_t& si, void *handler,
   /* Delay the interrupt if we are
      1) somehow inside the DLL
      2) in a Windows DLL.  */
-  if (incyg || inside_kernel (cx, true))
+  if (incyg || inside_kernel (cx))
     interrupted = false;
   else
     {
+#ifdef __x86_64__
+      /* When the Rip points to an instruction that causes an exception,
+	 modifying Rip and calling ResumeThread() may sometimes result in
+	 a crash. To prevent this, advance execution by a single instruction
+	 by setting the trap flag (TF) before calling ResumeThread(). This
+	 will trigger either STATUS_SINGLE_STEP or the exception caused by
+	 the instruction that Rip originally pointed to.  By suspending the
+	 targeted thread within exception::handle(), Rip no longer points
+	 to the problematic instruction, allowing safe handling of the
+	 interrupt. As a result, Rip can be adjusted appropriately, and the
+	 thread can resume execution without unexpected crashes.  */
+      if (!inside_kernel (cx, true))
+	{
+	  cx->EFlags |= 0x100; /* Set TF (setup single step execution) */
+	  SetThreadContext (*this, cx);
+	  suspend_on_exception = true;
+	  ResumeThread (*this);
+	  ULONG cnt = 0;
+	  NTSTATUS status;
+	  do
+	    {
+	      yield ();
+	      status = NtQueryInformationThread (*this, ThreadSuspendCount,
+						 &cnt, sizeof (cnt), NULL);
+	    }
+	  while (NT_SUCCESS (status) && cnt == 0);
+	  GetThreadContext (*this, cx);
+	  suspend_on_exception = false;
+	}
+#endif
       DWORD64 &ip = cx->_CX_instPtr;
       push (ip);
       interrupt_setup (si, handler, siga);
@@ -1283,6 +1322,7 @@ set_process_mask_delta ()
   else
     oldmask = _my_tls.sigmask;
   newmask = (oldmask | _my_tls.deltamask) & ~SIG_NONMASKABLE;
+  _my_tls.deltamask = 0;
   sigproc_printf ("oldmask %lx, newmask %lx, deltamask %lx", oldmask, newmask,
 		  _my_tls.deltamask);
   _my_tls.sigmask = newmask;
@@ -1505,12 +1545,15 @@ sigpacket::process ()
       if (tl_entry)
 	{
 	  tls = tl_entry->thread;
+	  tl_entry->thread->lock ();
 	  if (sigismember (&tls->sigwait_mask, si.si_signo))
 	    issig_wait = true;
-	  else if (!sigismember (&tls->sigmask, si.si_signo))
+	  else if (!sigismember (&tls->sigmask, si.si_signo)
+		   && !sigismember (&tls->deltamask, si.si_signo))
 	    issig_wait = false;
 	  else
 	    tls = NULL;
+	  tl_entry->thread->unlock ();
 	}
     }
 
@@ -1758,7 +1801,7 @@ _cygtls::call_signal_handler ()
 
       int this_errno = saved_errno;
       reset_signal_arrived ();
-      incyg = false;
+      incyg = 0;
       current_sig = 0;	/* Flag that we can accept another signal */
 
       /* We have to fetch the original return address from the signal stack
@@ -1871,7 +1914,7 @@ _cygtls::call_signal_handler ()
 	}
       unlock ();
 
-      incyg = true;
+      incyg = 1;
 
       set_signal_mask (_my_tls.sigmask, (this_sa_flags & SA_SIGINFO)
 					? context1.uc_sigmask : this_oldmask);

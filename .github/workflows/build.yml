@@ -38,9 +38,9 @@ jobs:
           --with-newlib \
           --with-libgloss \
           --enable-multilib \
-          --enable-newlib-io-c99-formats \
-          --enable-newlib-io-long-long \
+          --disable-newlib-io-c99-formats \
           --disable-newlib-supplied-syscalls \
+          --enable-newlib-nano-formatted-io \
           --enable-newlib-reent-small \
           --enable-target-optspace \
           --disable-option-checking \

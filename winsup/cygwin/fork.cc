@@ -44,8 +44,8 @@ class frok
   int child_pid;
   int this_errno;
   HANDLE hchild;
-  int __stdcall parent (volatile char * volatile here);
-  int __stdcall child (volatile char * volatile here);
+  int parent (volatile char * volatile here);
+  int child (volatile char * volatile here);
   bool error (const char *fmt, ...);
   friend int dofork (void **proc, bool *with_forkables);
 };
@@ -59,7 +59,7 @@ resume_child (HANDLE forker_finished)
 }
 
 /* Notify parent that it is time for the next step. */
-static void __stdcall
+static void
 sync_with_parent (const char *s, bool hang_self)
 {
   debug_printf ("signalling parent: %s", s);
@@ -131,7 +131,7 @@ child_info::prefork (bool detached)
     }
 }
 
-int __stdcall
+int
 frok::child (volatile char * volatile here)
 {
   HANDLE& hParent = ch.parent;
@@ -187,7 +187,6 @@ frok::child (volatile char * volatile here)
 
   ForceCloseHandle1 (fork_info->forker_finished, forker_finished);
 
-  pthread::atforkchild ();
   cygbench ("fork-child");
   ld_preload ();
   fixup_hooks_after_fork ();
@@ -199,10 +198,11 @@ frok::child (volatile char * volatile here)
   CloseHandle (hParent);
   hParent = NULL;
   cygwin_finished_initializing = true;
+  pthread::atforkchild ();
   return 0;
 }
 
-int __stdcall
+int
 frok::parent (volatile char * volatile stack_here)
 {
   HANDLE forker_finished;
@@ -212,7 +212,37 @@ frok::parent (volatile char * volatile stack_here)
   bool fix_impersonation = false;
   pinfo child;
 
-  int c_flags = GetPriorityClass (GetCurrentProcess ());
+  /* Inherit scheduling parameters by default. */
+  int child_nice = myself->nice;
+  int child_sched_policy = myself->sched_policy;
+  int c_flags = 0;
+
+  /* Handle SCHED_RESET_ON_FORK flag. */
+  if (myself->sched_reset_on_fork)
+    {
+      bool batch = (myself->sched_policy == SCHED_BATCH);
+      bool idle = (myself->sched_policy == SCHED_IDLE);
+      bool set_prio = false;
+      /* Reset negative nice values to zero. */
+      if (myself->nice < 0)
+	{
+	  child_nice = 0;
+	  set_prio = !idle;
+	}
+      /* Reset realtime policies to SCHED_OTHER. */
+      if (!(myself->sched_policy == SCHED_OTHER || batch || idle))
+	{
+	  child_sched_policy = SCHED_OTHER;
+	  set_prio = true;
+	}
+      if (set_prio)
+	c_flags = nice_to_winprio (child_nice, batch);
+    }
+
+  /* Always request a priority because otherwise anything above
+     NORMAL_PRIORITY_CLASS would not be inherited. */
+  if (!c_flags)
+    c_flags = GetPriorityClass (GetCurrentProcess ());
   debug_printf ("priority class %d", c_flags);
   /* Per MSDN, this must be specified even if lpEnvironment is set to NULL,
      otherwise UNICODE characters in the parent environment are not copied
@@ -296,7 +326,10 @@ frok::parent (volatile char * volatile stack_here)
   si.lpReserved2 = (LPBYTE) &ch;
   si.cbReserved2 = sizeof (ch);
 
-  bool locked = __malloc_lock ();
+  /* NEVER, EVER, call a function which in turn calls malloc&friends while this
+     malloc lock is active! */
+  __malloc_lock ();
+  bool locked = true;
 
   /* Remove impersonation */
   cygheap->user.deimpersonate ();
@@ -308,8 +341,7 @@ frok::parent (volatile char * volatile stack_here)
 
   ch.silentfail (!*with_forkables); /* fail silently without forkables */
 
-  tmp_pathbuf tp;
-  PSECURITY_ATTRIBUTES sa = (PSECURITY_ATTRIBUTES) tp.w_get ();
+  PSECURITY_ATTRIBUTES sa = (PSECURITY_ATTRIBUTES) alloca (1024);
   if (!sec_user_nih (sa, cygheap->user.saved_sid (),
 		     well_known_authenticated_users_sid,
 		     PROCESS_QUERY_LIMITED_INFORMATION))
@@ -399,7 +431,9 @@ frok::parent (volatile char * volatile stack_here)
       goto cleanup;
     }
 
-  child->nice = myself->nice;
+  child->nice = child_nice;
+  child->sched_policy = child_sched_policy;
+  child->sched_reset_on_fork = false;
 
   /* Initialize things that are done later in dll_crt0_1 that aren't done
      for the forkee.  */
@@ -626,10 +660,12 @@ dofork (void **proc, bool *with_forkables)
     ischild = !!setjmp (grouped.ch.jmp);
 
     volatile char * volatile stackp;
-#ifdef __x86_64__
+#if defined(__x86_64__)
     __asm__ volatile ("movq %%rsp,%0": "=r" (stackp));
+#elif defined(__aarch64__)
+    __asm__ volatile ("mov %0, sp" : "=r" (stackp));
 #else
-    __asm__ volatile ("movl %%esp,%0": "=r" (stackp));
+#error unimplemented for this target
 #endif
 
     if (!ischild)
@@ -637,15 +673,16 @@ dofork (void **proc, bool *with_forkables)
     else
       {
 	res = grouped.child (stackp);
-	in_forkee = false;
+	__in_forkee = FORKED;
 	ischild = true;	/* might have been reset by fork mem copy */
       }
   }
 
   if (ischild)
     {
-      myself->process_state |= PID_ACTIVE;
-      myself->process_state &= ~(PID_INITIALIZING | PID_EXITED | PID_REAPED);
+      InterlockedOr ((LONG *) &myself->process_state, PID_ACTIVE);
+      InterlockedAnd ((LONG *) &myself->process_state,
+		      ~(PID_INITIALIZING | PID_EXITED | PID_REAPED));
     }
   else if (res < 0)
     {

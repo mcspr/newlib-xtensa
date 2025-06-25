@@ -127,7 +127,7 @@
 #endif
 
 /* Configure small REENT structure for Xilinx MicroBlaze platforms */
-#if defined (__MICROBLAZE__)
+#if defined (__MICROBLAZE__) && !defined(__rtems__)
 #ifndef _REENT_SMALL
 #define _REENT_SMALL
 #endif
@@ -193,6 +193,9 @@
 #include <xtensa/config/core-isa.h>
 #define MALLOC_ALIGNMENT ((XCHAL_DATA_WIDTH) < 16 ? 16 : (XCHAL_DATA_WIDTH))
 /* esp8266-specific: shrink the default fd buffer size */
+#define _REENT_SMALL
+#define _READ_WRITE_RETURN_TYPE int
+#define _READ_WRITE_BUFSIZE_TYPE int
 #define __BUFSIZ__ 128
 #endif
 
@@ -249,8 +252,6 @@
 #define __FILENAME_MAX__ 255
 #define _READ_WRITE_RETURN_TYPE _ssize_t
 #define __DYNAMIC_REENT__
-#define _REENT_GLOBAL_ATEXIT
-#define _REENT_GLOBAL_STDIO_STREAMS
 #endif
 
 #ifndef __EXPORT
@@ -288,15 +289,27 @@
 #endif
 #endif
 
-#ifdef _WANT_REENT_GLOBAL_STDIO_STREAMS
-#ifndef _REENT_GLOBAL_STDIO_STREAMS
-#define _REENT_GLOBAL_STDIO_STREAMS
-#endif
-#endif
-
 #ifdef _WANT_USE_LONG_TIME_T
 #ifndef _USE_LONG_TIME_T
 #define _USE_LONG_TIME_T
+#endif
+#endif
+
+#ifdef _WANT_USE_GDTOA
+#ifndef _USE_GDTOA
+#define _USE_GDTOA
+#endif
+#endif
+
+#ifdef _WANT_REENT_BACKWARD_BINARY_COMPAT
+#ifndef _REENT_BACKWARD_BINARY_COMPAT
+#define _REENT_BACKWARD_BINARY_COMPAT
+#endif
+#endif
+
+#ifdef _WANT_REENT_THREAD_LOCAL
+#ifndef _REENT_THREAD_LOCAL
+#define _REENT_THREAD_LOCAL
 #endif
 #endif
 

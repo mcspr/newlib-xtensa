@@ -54,7 +54,6 @@ typedef __intptr_t register_t;
 #ifndef _IN_ADDR_T_DECLARED
 typedef	__uint32_t	in_addr_t;	/* base type for internet address */
 #define	_IN_ADDR_T_DECLARED
-#define IN_ADDR_T_DEFINED 1 // For LWIP2
 #endif
 
 #ifndef _IN_PORT_T_DECLARED
@@ -116,10 +115,8 @@ typedef	_TIME_T_	time_t;
 #define	_TIME_T_DECLARED
 #endif
 
-#ifndef __daddr_t_defined
-typedef	long	daddr_t;
-#define __daddr_t_defined
-#endif
+typedef	__daddr_t	daddr_t;
+
 #ifndef __caddr_t_defined
 typedef	char *	caddr_t;
 #define __caddr_t_defined

@@ -19,9 +19,6 @@
 /*
  * stat -- Since we have no file system, we just return an error.
  */
-
-#ifndef REENTRANT_SYSCALLS_PROVIDED
-
 int
 stat (const char *path,
        struct stat *buf)
@@ -30,18 +27,3 @@ stat (const char *path,
   return (-1);
 }
 
-#else /* REENTRANT_SYSCALLS_PROVIDED */
-
-#include <sys/reent.h>
-
-int
-_DEFUN (_stat_r, (ptr, path, buf),
-	struct _reent *ptr _AND
-	const char *path _AND
-	struct stat *buf)
-{
-  ptr->_errno = EIO;
-  return -1;
-}
-
-#endif /* REENTRANT_SYSCALLS_PROVIDED */

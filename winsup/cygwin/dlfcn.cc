@@ -7,7 +7,6 @@ Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
 details. */
 
 #include "winsup.h"
-#include <psapi.h>
 #include <stdlib.h>
 #include <dlfcn.h>
 #include <ctype.h>
@@ -195,9 +194,8 @@ dlopen (const char *name, int flags)
 	  break;
 	}
 
-      DWORD gmheflags = (flags & RTLD_NODELETE)
-		      ?  GET_MODULE_HANDLE_EX_FLAG_PIN
-		      : 0;
+      DWORD nodelete = (flags & RTLD_NODELETE) ? GET_MODULE_HANDLE_EX_FLAG_PIN
+					       : 0;
 
       tmp_pathbuf tp; /* single one per stack frame */
       tmp_pathbuf_allocator allocator (tp);
@@ -268,45 +266,38 @@ dlopen (const char *name, int flags)
 
       if (flags & RTLD_NOLOAD)
 	{
-	  GetModuleHandleExW (gmheflags, wpath, (HMODULE *) &ret);
+	  GetModuleHandleExW (nodelete, wpath, (HMODULE *) &ret);
 	  if (ret)
 	    break;
 	}
-
-#ifdef __i386__
-      /* Workaround for broken DLLs built against Cygwin versions 1.7.0-49
-	 up to 1.7.0-57.  They override the cxx_malloc pointer in their
-	 DLL initialization code even if loaded dynamically.  This is a
-	 no-no since a later dlclose lets cxx_malloc point into nirvana.
-	 The below kludge "fixes" that by reverting the original cxx_malloc
-	 pointer after LoadLibrary.  This implies that their overrides
-	 won't be applied; that's OK.  All overrides should be present at
-	 final link time, as Windows doesn't allow undefined references;
-	 it would actually be wrong for a dlopen'd DLL to opportunistically
-	 override functions in a way that wasn't known then.  We're not
-	 going to try and reproduce the full ELF dynamic loader here!  */
-
-      /* Store original cxx_malloc pointer. */
-      struct per_process_cxx_malloc *tmp_malloc;
-      tmp_malloc = __cygwin_user_data.cxx_malloc;
-#endif
 
       ret = (void *) LoadLibraryW (wpath);
       /* reference counting */
       if (ret)
 	{
-	  dll *d = dlls.find (ret);
+	  dll *d = dlls.find (ret, true);
 	  if (d)
-	    ++d->count;
+	    {
+	      /* count == INT_MIN is used to specify RTLD_NODELETE */
+	      if (d->count == INT_MIN || nodelete)
+		d->count = INT_MIN;
+	      else
+		++d->count;
+	    }
+	  else
+	    {
+	      /* All Cygwin DLLs loaded or linked into this process get a dll
+	         record when they call dll_dllcrt0 on init.  So if we don't
+		 find the dll it's a native DLL.  Add it as DLL_NATIVE.
+		 Simply restore the LoadLibrary count after fork.  Don't care
+		 where they are loaded to, don't try to fix up their data and
+		 bss segments after fork, and don't run dtors. */
+	      dlls.alloc ((HMODULE) ret, user_data, DLL_NATIVE);
+	    }
 	}
 
-#ifdef __i386__
-      /* Restore original cxx_malloc pointer. */
-      __cygwin_user_data.cxx_malloc = tmp_malloc;
-#endif
-
-      if (ret && gmheflags)
-	GetModuleHandleExW (gmheflags, wpath, (HMODULE *) &ret);
+      if (ret && nodelete)
+	GetModuleHandleExW (nodelete, wpath, (HMODULE *) &ret);
 
       if (!ret)
 	__seterrno ();
@@ -372,16 +363,21 @@ dlclose (void *handle)
   int ret = 0;
   if (handle != GetModuleHandle (NULL))
     {
-      /* reference counting */
-      dll *d = dlls.find (handle);
-      if (!d || d->count <= 0)
+      /* Reference counting.
+	 count == INT_MIN is used to specify RTLD_NODELETE */
+      dll *d = dlls.find (handle, true);
+      if (!d || (d->count <= 0 && d->count != INT_MIN))
 	{
 	  errno = ENOENT;
 	  ret = -1;
 	}
-      else
+      else if (d->count != INT_MIN)
 	{
 	  --d->count;
+	  /* Native DLLs don't call cygwin_detach_dll so they have to be
+	     detached explicitely. */
+	  if (d->type == DLL_NATIVE && d->count <= 0)
+	    dlls.detach (handle);
 	  if (!FreeLibrary ((HMODULE) handle))
 	    {
 	      __seterrno ();
@@ -412,7 +408,8 @@ extern "C" int
 dladdr (const void *addr, Dl_info *info)
 {
   HMODULE hModule;
-  BOOL ret = GetModuleHandleEx (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+  BOOL ret = GetModuleHandleEx (GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT|
+				GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
 				(LPCSTR) addr,
 				&hModule);
   if (!ret)
@@ -424,14 +421,16 @@ dladdr (const void *addr, Dl_info *info)
   /* Get the module filename.  This pathname may be in short-, long- or //?/
      format, depending on how it was specified when loaded, but we assume this
      is always an absolute pathname. */
-  WCHAR fname[MAX_PATH];
-  DWORD length = GetModuleFileNameW (hModule, fname, MAX_PATH);
-  if ((length == 0) || (length == MAX_PATH))
+  tmp_pathbuf tp;
+  PWCHAR fname = tp.w_get ();
+  DWORD length = GetModuleFileNameW (hModule, fname, NT_MAX_PATH);
+  if ((length == 0) || (length == NT_MAX_PATH))
     return 0;
 
   /* Convert to a cygwin pathname */
+  static_assert (sizeof (info->dli_fname) == PATH_MAX);
   ssize_t conv = cygwin_conv_path (CCP_WIN_W_TO_POSIX | CCP_ABSOLUTE, fname,
-				   info->dli_fname, MAX_PATH);
+				   info->dli_fname, PATH_MAX);
   if (conv)
     return 0;
 

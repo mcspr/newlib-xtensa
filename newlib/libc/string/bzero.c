@@ -1,5 +1,3 @@
-//ESP8266 has this in ROM
-#if 0
 /*
 FUNCTION
 <<bzero>>---initialize memory to zero
@@ -34,4 +32,3 @@ bzero(void *b, size_t length)
 
 	memset(b, 0, length);
 }
-#endif

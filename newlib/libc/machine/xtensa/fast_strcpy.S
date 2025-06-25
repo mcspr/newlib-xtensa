@@ -52,6 +52,9 @@ __fast_strcpy:
 	l8ui	a8, a3, 0	// get byte 0
 	addi	a3, a3, 1	// advance src pointer
 	s8i	a8, a10, 0	// store byte 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	beqz	a8, 1f		// if byte 0 is zero
 	addi	a10, a10, 1	// advance dst pointer
 	bbci.l	a3, 1, .Lsrcaligned // if src is now word-aligned
@@ -60,11 +63,17 @@ __fast_strcpy:
 	l8ui	a8, a3, 0	// get byte 0
 	/* 1-cycle interlock */
 	s8i	a8, a10, 0	// store byte 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	beqz	a8, 1f		// if byte 0 is zero
 	l8ui	a8, a3, 1	// get byte 0
 	addi	a3, a3, 2	// advance src pointer
 	s8i	a8, a10, 1	// store byte 0
 	addi	a10, a10, 2	// advance dst pointer
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	bnez	a8, .Lsrcaligned
 1:	leaf_return
 
@@ -93,6 +102,10 @@ __fast_strcpy:
 	bnone	a8, a5, .Lz1	// if byte 1 is zero
 	bnone	a8, a6, .Lz2	// if byte 2 is zero
 	s32i	a8, a10, 0	// store word to dst
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	l32i	a8, a10, 0
+	s32i	a8, a10, 0
+#endif
 	bnone	a8, a7, .Lz3	// if byte 3 is zero
 	addi	a10, a10, 4	// advance dst pointer
 
@@ -106,6 +119,11 @@ __fast_strcpy:
 	bnone	a8, a5, .Lz1	// if byte 1 is zero
 	bnone	a8, a6, .Lz2	// if byte 2 is zero
 	s32i	a8, a10, 0	// store word to dst
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	l32i	a8, a10, 0
+	s32i	a8, a10, 0
+#endif
+
 	bany	a8, a7, 1b	// if byte 3 is zero
 #endif /* !XCHAL_HAVE_LOOPS */
 
@@ -117,6 +135,9 @@ __fast_strcpy:
 	movi	a8, 0
 #endif
 	s8i	a8, a10, 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 .Lz1:	/* Byte 1 is zero.  */
@@ -124,6 +145,9 @@ __fast_strcpy:
         extui   a8, a8, 16, 16
 #endif
 	s16i	a8, a10, 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 .Lz2:	/* Byte 2 is zero.  */
@@ -133,6 +157,9 @@ __fast_strcpy:
 	s16i	a8, a10, 0
 	movi	a8, 0
 	s8i	a8, a10, 2
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 #if 1
@@ -162,6 +189,9 @@ __fast_strcpy:
 	addi	a3, a3, 1
 	s8i	a8, a10, 0
 	addi	a10, a10, 1
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 #if XCHAL_HAVE_LOOPS
 	beqz	a8, 2f
 #else
@@ -214,6 +244,9 @@ __fast_strcpy:
 	movi	a8, 0
 #endif
 	s8i	a8, a10, 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 .Lu1:	/* Byte 1 is zero.  */
@@ -221,12 +254,18 @@ __fast_strcpy:
         extui   a8, a8, 16, 16
 #endif
 	s16i	a8, a10, 0
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 .Lu2:	/* Byte 2 is zero.  */
 	s16i	a8, a10, 0
 	movi	a8, 0
 	s8i	a8, a10, 2
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 #endif /* 0 */

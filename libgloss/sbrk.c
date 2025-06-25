@@ -22,22 +22,13 @@
 
 char *heap_ptr;
 
-/* This is a variable so that we can override it.
-   Coware crt run-time can do this.  */
-extern char _heap_sentry;	/* Defined by the linker */
-char *_heap_sentry_ptr = &_heap_sentry;
-
 /*
  * sbrk -- changes heap size size. Get nbytes more
  *         RAM. We just increment a pointer in what's
  *         left of memory on the board.
  */
-
-#ifndef REENTRANT_SYSCALLS_PROVIDED
-
-char *
-sbrk (nbytes)
-     int nbytes;
+void *
+sbrk (ptrdiff_t nbytes)
 {
   char        *base;
 

@@ -24,10 +24,6 @@
 
 #ifndef _DOUBLE_IS_32BITS
 
-/* __ieee754_remainder is provided by libgcc */
-
-#if 1
-
 #ifdef __STDC__
 static const double zero = 0.0;
 #else
@@ -80,7 +76,5 @@ static double zero = 0.0;
 	SET_HIGH_WORD(x,hx^sx);
 	return x;
 }
-
-#endif
 
 #endif /* defined(_DOUBLE_IS_32BITS) */

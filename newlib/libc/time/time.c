@@ -31,11 +31,13 @@ Supporting OS subroutine required: Some implementations require
 #include <reent.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#if 0
+
 time_t
 time (time_t * t)
 {
   struct timeval now;
+
+  now.tv_sec = (time_t) -1;
 
   if (_gettimeofday_r (_REENT, &now, NULL) < 0)
     now.tv_sec = (time_t) -1;
@@ -44,4 +46,3 @@ time (time_t * t)
     *t = now.tv_sec;
   return now.tv_sec;
 }
-#endif

@@ -51,7 +51,7 @@ No supporting OS subroutines are required.
 
 #include <_ansi.h>
 #include <stdio.h>
-#if !defined(__rtems__) && !defined(__xtensa__)
+#ifndef __rtems__
 #include <stdio_ext.h>
 #endif
 #include <errno.h>
@@ -72,7 +72,7 @@ _fpurge_r (struct _reent *ptr,
   t = fp->_flags;
   if (!t)
     {
-      ptr->_errno = EBADF;
+      _REENT_ERRNO(ptr) = EBADF;
       _newlib_flockfile_exit (fp);
       return EOF;
     }
@@ -97,7 +97,7 @@ fpurge (register FILE * fp)
   return _fpurge_r (_REENT, fp);
 }
 
-#if !defined(__rtems__) && !defined(__xtensa__)
+#ifndef __rtems__
 
 void
 __fpurge (register FILE * fp)

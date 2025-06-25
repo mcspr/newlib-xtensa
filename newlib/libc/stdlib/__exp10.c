@@ -4,11 +4,12 @@
 
 #include <_ansi.h>
 #include "std.h"
+#include <sys/pgmspace.h>
 
 double
 __exp10 (unsigned x)
 {
-  static const double powtab[] =
+  static const double powtab[] PROGMEM =
   {1.0,
    10.0,
    100.0,

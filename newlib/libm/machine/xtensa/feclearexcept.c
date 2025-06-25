@@ -25,7 +25,6 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
    OF THE POSSIBILITY OF SUCH DAMAGE.  */
 
-
 #include <xtensa/config/core-isa.h>
 
 #if XCHAL_HAVE_FP || XCHAL_HAVE_DFP
@@ -36,7 +35,7 @@
 int feclearexcept(int except)
 {
   unsigned int fsr;
-  
+
   if (except & ~FE_ALL_EXCEPT)
     return -1;
   except <<= _FE_EXCEPTION_FLAGS_OFFSET;

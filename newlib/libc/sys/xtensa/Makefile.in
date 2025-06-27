@@ -69,9 +69,13 @@ LIBRARIES = $(noinst_LIBRARIES)
 ARFLAGS = cru
 lib_a_AR = $(AR) $(ARFLAGS)
 lib_a_LIBADD =
-am_lib_a_OBJECTS = atexit.$(OBJEXT) stdio_pgmspace.$(OBJEXT) \
-	string_pgmspace.$(OBJEXT) creat.$(OBJEXT) isatty.$(OBJEXT) \
-	clibrary_init.$(OBJEXT) lock.$(OBJEXT)
+am_lib_a_OBJECTS = atexit.$(OBJEXT) creat.$(OBJEXT) isatty.$(OBJEXT) \
+	clibrary_init.$(OBJEXT) lock.$(OBJEXT) memccpy_P.$(OBJEXT) \
+	memchr_P.$(OBJEXT) memcmp_P.$(OBJEXT) memcpy_P.$(OBJEXT) \
+	memmem_P.$(OBJEXT) memmove_P.$(OBJEXT) strncasecmp_P.$(OBJEXT) \
+	strncat_P.$(OBJEXT) strncmp_P.$(OBJEXT) strncpy_P.$(OBJEXT) \
+	strnlen_P.$(OBJEXT) strstr_P.$(OBJEXT) printf_P.$(OBJEXT) \
+	snprintf_P.$(OBJEXT) sprintf_P.$(OBJEXT) vsnprintf_P.$(OBJEXT)
 lib_a_OBJECTS = $(am_lib_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -194,7 +198,13 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = cygnus
 INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = atexit.c stdio_pgmspace.c string_pgmspace.c creat.c isatty.c clibrary_init.c lock.c
+lib_a_SOURCES = atexit.c creat.c isatty.c clibrary_init.c lock.c \
+	pgmspace/memccpy_P.c pgmspace/memchr_P.c pgmspace/memcmp_P.c \
+	pgmspace/memcpy_P.c pgmspace/memmem_P.c pgmspace/memmove_P.c \
+	pgmspace/strncasecmp_P.c pgmspace/strncat_P.c \
+	pgmspace/strncmp_P.c pgmspace/strncpy_P.c pgmspace/strnlen_P.c \
+	pgmspace/strstr_P.c pgmspace/printf_P.c pgmspace/snprintf_P.c \
+	pgmspace/sprintf_P.c pgmspace/vsnprintf_P.c
 ACLOCAL_AMFLAGS = -I ../../..
 CONFIG_STATUS_DEPENDENCIES = $(newlib_basedir)/configure.host
 all: all-am
@@ -254,6 +264,102 @@ distclean-compile:
 
 .c.obj:
 	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+memccpy_P.o: pgmspace/memccpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memccpy_P.o `test -f 'pgmspace/memccpy_P.c' || echo '$(srcdir)/'`pgmspace/memccpy_P.c
+
+memccpy_P.obj: pgmspace/memccpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memccpy_P.obj `if test -f 'pgmspace/memccpy_P.c'; then $(CYGPATH_W) 'pgmspace/memccpy_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memccpy_P.c'; fi`
+
+memchr_P.o: pgmspace/memchr_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memchr_P.o `test -f 'pgmspace/memchr_P.c' || echo '$(srcdir)/'`pgmspace/memchr_P.c
+
+memchr_P.obj: pgmspace/memchr_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memchr_P.obj `if test -f 'pgmspace/memchr_P.c'; then $(CYGPATH_W) 'pgmspace/memchr_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memchr_P.c'; fi`
+
+memcmp_P.o: pgmspace/memcmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memcmp_P.o `test -f 'pgmspace/memcmp_P.c' || echo '$(srcdir)/'`pgmspace/memcmp_P.c
+
+memcmp_P.obj: pgmspace/memcmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memcmp_P.obj `if test -f 'pgmspace/memcmp_P.c'; then $(CYGPATH_W) 'pgmspace/memcmp_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memcmp_P.c'; fi`
+
+memcpy_P.o: pgmspace/memcpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memcpy_P.o `test -f 'pgmspace/memcpy_P.c' || echo '$(srcdir)/'`pgmspace/memcpy_P.c
+
+memcpy_P.obj: pgmspace/memcpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memcpy_P.obj `if test -f 'pgmspace/memcpy_P.c'; then $(CYGPATH_W) 'pgmspace/memcpy_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memcpy_P.c'; fi`
+
+memmem_P.o: pgmspace/memmem_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memmem_P.o `test -f 'pgmspace/memmem_P.c' || echo '$(srcdir)/'`pgmspace/memmem_P.c
+
+memmem_P.obj: pgmspace/memmem_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memmem_P.obj `if test -f 'pgmspace/memmem_P.c'; then $(CYGPATH_W) 'pgmspace/memmem_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memmem_P.c'; fi`
+
+memmove_P.o: pgmspace/memmove_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memmove_P.o `test -f 'pgmspace/memmove_P.c' || echo '$(srcdir)/'`pgmspace/memmove_P.c
+
+memmove_P.obj: pgmspace/memmove_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o memmove_P.obj `if test -f 'pgmspace/memmove_P.c'; then $(CYGPATH_W) 'pgmspace/memmove_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/memmove_P.c'; fi`
+
+strncasecmp_P.o: pgmspace/strncasecmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncasecmp_P.o `test -f 'pgmspace/strncasecmp_P.c' || echo '$(srcdir)/'`pgmspace/strncasecmp_P.c
+
+strncasecmp_P.obj: pgmspace/strncasecmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncasecmp_P.obj `if test -f 'pgmspace/strncasecmp_P.c'; then $(CYGPATH_W) 'pgmspace/strncasecmp_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strncasecmp_P.c'; fi`
+
+strncat_P.o: pgmspace/strncat_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncat_P.o `test -f 'pgmspace/strncat_P.c' || echo '$(srcdir)/'`pgmspace/strncat_P.c
+
+strncat_P.obj: pgmspace/strncat_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncat_P.obj `if test -f 'pgmspace/strncat_P.c'; then $(CYGPATH_W) 'pgmspace/strncat_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strncat_P.c'; fi`
+
+strncmp_P.o: pgmspace/strncmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncmp_P.o `test -f 'pgmspace/strncmp_P.c' || echo '$(srcdir)/'`pgmspace/strncmp_P.c
+
+strncmp_P.obj: pgmspace/strncmp_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncmp_P.obj `if test -f 'pgmspace/strncmp_P.c'; then $(CYGPATH_W) 'pgmspace/strncmp_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strncmp_P.c'; fi`
+
+strncpy_P.o: pgmspace/strncpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncpy_P.o `test -f 'pgmspace/strncpy_P.c' || echo '$(srcdir)/'`pgmspace/strncpy_P.c
+
+strncpy_P.obj: pgmspace/strncpy_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strncpy_P.obj `if test -f 'pgmspace/strncpy_P.c'; then $(CYGPATH_W) 'pgmspace/strncpy_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strncpy_P.c'; fi`
+
+strnlen_P.o: pgmspace/strnlen_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strnlen_P.o `test -f 'pgmspace/strnlen_P.c' || echo '$(srcdir)/'`pgmspace/strnlen_P.c
+
+strnlen_P.obj: pgmspace/strnlen_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strnlen_P.obj `if test -f 'pgmspace/strnlen_P.c'; then $(CYGPATH_W) 'pgmspace/strnlen_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strnlen_P.c'; fi`
+
+strstr_P.o: pgmspace/strstr_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strstr_P.o `test -f 'pgmspace/strstr_P.c' || echo '$(srcdir)/'`pgmspace/strstr_P.c
+
+strstr_P.obj: pgmspace/strstr_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o strstr_P.obj `if test -f 'pgmspace/strstr_P.c'; then $(CYGPATH_W) 'pgmspace/strstr_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/strstr_P.c'; fi`
+
+printf_P.o: pgmspace/printf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o printf_P.o `test -f 'pgmspace/printf_P.c' || echo '$(srcdir)/'`pgmspace/printf_P.c
+
+printf_P.obj: pgmspace/printf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o printf_P.obj `if test -f 'pgmspace/printf_P.c'; then $(CYGPATH_W) 'pgmspace/printf_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/printf_P.c'; fi`
+
+snprintf_P.o: pgmspace/snprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o snprintf_P.o `test -f 'pgmspace/snprintf_P.c' || echo '$(srcdir)/'`pgmspace/snprintf_P.c
+
+snprintf_P.obj: pgmspace/snprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o snprintf_P.obj `if test -f 'pgmspace/snprintf_P.c'; then $(CYGPATH_W) 'pgmspace/snprintf_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/snprintf_P.c'; fi`
+
+sprintf_P.o: pgmspace/sprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o sprintf_P.o `test -f 'pgmspace/sprintf_P.c' || echo '$(srcdir)/'`pgmspace/sprintf_P.c
+
+sprintf_P.obj: pgmspace/sprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o sprintf_P.obj `if test -f 'pgmspace/sprintf_P.c'; then $(CYGPATH_W) 'pgmspace/sprintf_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/sprintf_P.c'; fi`
+
+vsnprintf_P.o: pgmspace/vsnprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o vsnprintf_P.o `test -f 'pgmspace/vsnprintf_P.c' || echo '$(srcdir)/'`pgmspace/vsnprintf_P.c
+
+vsnprintf_P.obj: pgmspace/vsnprintf_P.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o vsnprintf_P.obj `if test -f 'pgmspace/vsnprintf_P.c'; then $(CYGPATH_W) 'pgmspace/vsnprintf_P.c'; else $(CYGPATH_W) '$(srcdir)/pgmspace/vsnprintf_P.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

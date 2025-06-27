@@ -18,17 +18,15 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-// TODO - Optimize these routines to use 32-bit accesses whenever possible
-
 #define __need_size_t
 #include <stddef.h>
 
 #include <string.h>
-#include <sys/pgmspace.h>
+#include "_pgmspace.h"
 
 void *memmove_P(void *dest, const void *src, size_t n)
 {
-    if ( ((const char *)src >= (const char *)0x40000000) && ((const char *)dest < (const char *)0x40000000) )
+    if (__pgm_expected(src) && !__pgm_unlikely(dest))
         return memcpy_P(dest, src, n);
     else
         return memmove(dest, src, n);

@@ -5,7 +5,7 @@
    STDIO function because it's been modified to support PROGMEM automatically
 */
 
-int printf_P(PGM_P formatP, ...) {
+int printf_P(const char* formatP, ...) {
     int ret;
     va_list arglist;
     va_start(arglist, formatP);
@@ -14,7 +14,7 @@ int printf_P(PGM_P formatP, ...) {
     return ret;
 }
 
-int sprintf_P(char* str, PGM_P formatP, ...) {
+int sprintf_P(char* str, const char* formatP, ...) {
     int ret;
     va_list arglist;
     va_start(arglist, formatP);
@@ -23,7 +23,7 @@ int sprintf_P(char* str, PGM_P formatP, ...) {
     return ret;
 }
 
-int snprintf_P(char* str, size_t strSize, PGM_P formatP, ...) {
+int snprintf_P(char* str, size_t strSize, const char* formatP, ...) {
     int ret;
     va_list arglist;
     va_start(arglist, formatP);
@@ -33,7 +33,7 @@ int snprintf_P(char* str, size_t strSize, PGM_P formatP, ...) {
 }
 
 
-int vsnprintf_P(char* str, size_t strSize, PGM_P formatP, va_list ap) {
+int vsnprintf_P(char* str, size_t strSize, const char* formatP, va_list ap) {
     int ret;
     ret = vsnprintf(str, strSize, formatP, ap);
     return ret;

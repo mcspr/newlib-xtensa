@@ -1,5 +1,3 @@
-// ESP8266 has this in ROM
-#if 0
 /*
 FUNCTION
 	<<strncmp>>---character string compare
@@ -114,4 +112,3 @@ strncmp (const char *s1,
   return (*(unsigned char *) s1) - (*(unsigned char *) s2);
 #endif /* not PREFER_SIZE_OVER_SPEED */
 }
-#endif

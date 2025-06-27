@@ -1,5 +1,3 @@
-// ESP8266 has this in ROM
-#if 0
 /*
 FUNCTION
 	<<memcmp>>---compare two memory areas
@@ -104,4 +102,3 @@ memcmp (const void *m1,
   return 0;
 #endif /* not PREFER_SIZE_OVER_SPEED */
 }
-#endif

@@ -27,7 +27,7 @@
 .begin schedule
 	.align	4
 	.literal_position
-__strncpy_aux:
+__fast_strncpy_aux:
 
 .Lsrc1mod2: // src address is odd
 	l8ui	a8, a3, 0	// get byte 0

@@ -1,5 +1,3 @@
-//ESP8266 has this in ROM
-#if 0
 /*
 FUNCTION
 	<<strlen>>---character string length
@@ -82,4 +80,3 @@ strlen (const char *str)
     str++;
   return str - start;
 }
-#endif

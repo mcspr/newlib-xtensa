@@ -1,6 +1,3 @@
-// ESP8266 has this in ROM
-#if 0
-
 /* Optimized strstr function.
    Copyright (c) 2018 Arm Ltd.  All rights reserved.
 
@@ -206,5 +203,3 @@ strstr (const char *haystack, const char *needle)
   return two_way_long_needle (hs, hs_len, ne, ne_len);
 }
 #endif /* compilation for speed */
-
-#endif /* ESP8266 */

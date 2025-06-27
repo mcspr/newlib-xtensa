@@ -1,4 +1,4 @@
-/* strcpy.c - Xtensa code to determine if source is PMEM or RAM and call appropriate strcpy routine.
+/* strncpy.c - Xtensa code to determine if source is PMEM or RAM and call appropriate strcpy routine.
 
   GCC is a very smart compiler, and it will, in fact, replace printf(), and its
   related functions with strcpy() calls in order to optimize speed.  This fails
@@ -26,9 +26,9 @@
 
 #include <string.h>
 
-char *strcpy(char *dest, const char *src)
+char *strncpy(char *dest, const char *src, size_t n)
 {
-    extern char *__fast_strcpy(char *dest, const char *src);
-    if (src >= (const char *)0x40000000) return strcpy_P(dest, src);
-    else return __fast_strcpy(dest, src);
+    extern char *__fast_strncpy(char *dest, const char *src, size_t n);
+    if (src >= (const char *)0x40000000) return strncpy_P(dest, src, n);
+    else return __fast_strncpy(dest, src, n);
 }

@@ -639,7 +639,7 @@ case "${host}" in
   xtensa*-*-* | xtensa*-*)
 	posix_dir=posix
 	sys_dir=xtensa
-	newlib_cflags="${newlib_cflags} -D_NO_EXECVE -D_NO_GLOB -D_NO_WORDEXP -DHAVE_OPENDIR -DSIGNAL_PROVIDED -DABORT_PROVIDED -DMALLOC_PROVIDED"
+	newlib_cflags="${newlib_cflags} -D_NO_EXECVE -D_NO_GLOB -D_NO_WORDEXP -DHAVE_OPENDIR -DSIGNAL_PROVIDED -DABORT_PROVIDED -DMALLOC_PROVIDED -D_NO_POSIX_SPAWN"
 	;;
   z8k-*-coff)
 	sys_dir=z8ksim

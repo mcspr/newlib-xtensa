@@ -45,8 +45,6 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 <<lseek>>, <<read>>, <<sbrk>>, <<write>>.
 */
 
-#ifndef ATEXIT_PROVIDED
-
 #include <stdlib.h>
 #include "atexit.h"
 
@@ -59,5 +57,3 @@ atexit (void (*fn) (void))
 {
   return __register_exitproc (__et_atexit, fn, NULL, NULL);
 }
-
-#endif

@@ -38,5 +38,5 @@ __clibrary_init (int argc, char **argv, char **envp,
   if (init)
     init ();
   if (fini)
-    _atexit (fini);
+    atexit (fini);
 }

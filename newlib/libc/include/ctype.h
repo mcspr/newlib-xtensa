@@ -2,8 +2,8 @@
 #define _CTYPE_H_
 
 #include "_ansi.h"
-#include <sys/ctype.h>
 #include <sys/cdefs.h>
+#include <sys/ctype.h>
 
 #if __POSIX_VISIBLE >= 200809 || __MISC_VISIBLE || defined (_COMPILING_NEWLIB)
 #include <sys/_locale.h>
@@ -88,10 +88,8 @@ const char *__locale_ctype_ptr (void);
    Meanwhile, the real index to __CTYPE_PTR+1 must be cast to int,
    since isalpha(0x100000001LL) must equal isalpha(1), rather than being
    an out-of-bounds reference on a 64-bit machine.  */
-#ifdef pgm_read_byte
-  #define __ctype_lookup(__c) pgm_read_byte(&(__CTYPE_PTR+sizeof(""[__c]))[(int)(__c)])
-#else
-  #define __ctype_lookup(__c) ((__CTYPE_PTR+sizeof(""[__c]))[(int)(__c)])
+#ifndef __ctype_lookup
+    #define __ctype_lookup(__c) ((__CTYPE_PTR+sizeof(""[__c]))[(int)(__c)])
 #endif
 
 #define	isalpha(__c)	(__ctype_lookup(__c)&(_U|_L))
@@ -123,7 +121,9 @@ __locale_ctype_ptr_l(locale_t _l)
 	return __locale_ctype_ptr();
 }
 #endif
-#define __ctype_lookup_l(__c,__l) pgm_read_byte(&((__locale_ctype_ptr_l(__l)+sizeof(""[__c]))[(int)(__c)]))
+#ifndef __ctype_lookup_l
+    #define __ctype_lookup_l(__c,__l) ((__locale_ctype_ptr_l(__l)+sizeof(""[__c]))[(int)(__c)])
+#endif
 
 #define	isalpha_l(__c,__l)	(__ctype_lookup_l(__c,__l)&(_U|_L))
 #define	isupper_l(__c,__l)	((__ctype_lookup_l(__c,__l)&(_U|_L))==_U)

@@ -30,7 +30,6 @@ lib_a_SOURCES += \
   pgmspace/sprintf_P.c \
   pgmspace/vsnprintf_P.c
 
-#crt0.o: crt0.c
 all-local: crt0.o
 
 ACLOCAL_AMFLAGS = -I ../../..

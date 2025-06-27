@@ -30,7 +30,7 @@
 #include <string.h>
 #include <sys/pgmspace.h>
 
-size_t strnlen_P(PGM_P s, size_t size)
+size_t strnlen_P(const char* s, size_t size)
 {
     const char *cp = s;
     const uint32_t *pmem;
@@ -85,7 +85,7 @@ done:
     return (size_t) (cp - s);
 }
 
-char* strstr_P(const char* haystack, PGM_P needle)
+char* strstr_P(const char* haystack, const char* needle)
 {
     const char* pn = (const char*)(needle);
     if (haystack[0] == 0) {
@@ -112,7 +112,7 @@ char* strstr_P(const char* haystack, PGM_P needle)
     return NULL;
 }
 
-void* memcpy_P(void* dest, PGM_VOID_P src, size_t count)
+void* memcpy_P(void* dest, const void* src, size_t count)
 {
     const uint8_t* read = (const uint8_t*)(src);
     uint8_t* write = (uint8_t*)(dest);
@@ -141,7 +141,7 @@ void* memcpy_P(void* dest, PGM_VOID_P src, size_t count)
     return dest;
 }
 
-int memcmp_P(const void* buf1, PGM_VOID_P buf2P, size_t size)
+int memcmp_P(const void* buf1, const void* buf2P, size_t size)
 {
     int result = 0;
     const uint8_t* read1 = (const uint8_t*)buf1;
@@ -163,7 +163,7 @@ int memcmp_P(const void* buf1, PGM_VOID_P buf2P, size_t size)
     return result;
 }
 
-void* memccpy_P(void* dest, PGM_VOID_P src, int c, size_t count)
+void* memccpy_P(void* dest, const void* src, int c, size_t count)
 {
     uint8_t* read = (uint8_t*)src;
     uint8_t* write = (uint8_t*)dest;
@@ -190,7 +190,7 @@ void *memmove_P(void *dest, const void *src, size_t n)
 }
 
 
-void* memmem_P(const void* buf, size_t bufSize, PGM_VOID_P findP, size_t findPSize)
+void* memmem_P(const void* buf, size_t bufSize, const void* findP, size_t findPSize)
 {
     const uint8_t* read = (const uint8_t*)buf;
     const uint8_t* find = (uint8_t*)findP;
@@ -228,7 +228,7 @@ void* memmem_P(const void* buf, size_t bufSize, PGM_VOID_P findP, size_t findPSi
     return NULL;
 }
 
-char* strncpy_P(char* dest, PGM_P src, size_t size)
+char* strncpy_P(char* dest, const char* src, size_t size)
 {
     bool size_known = (size != SIZE_IRRELEVANT);
     const char* read = src;
@@ -274,7 +274,7 @@ char* strncpy_P(char* dest, PGM_P src, size_t size)
     return dest;
 }
 
-char* strncat_P(char* dest, PGM_P src, size_t size)
+char* strncat_P(char* dest, const char* src, size_t size)
 {
     char* write = dest;
 
@@ -302,7 +302,7 @@ char* strncat_P(char* dest, PGM_P src, size_t size)
     return dest;
 }
 
-int strncmp_P(const char* str1, PGM_P str2P, size_t size)
+int strncmp_P(const char* str1, const char* str2P, size_t size)
 {
     int result = 0;
 
@@ -322,7 +322,7 @@ int strncmp_P(const char* str1, PGM_P str2P, size_t size)
     return result;
 }
 
-int strncasecmp_P(const char* str1, PGM_P str2P, size_t size)
+int strncasecmp_P(const char* str1, const char* str2P, size_t size)
 {
     int result = 0;
 

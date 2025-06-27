@@ -192,6 +192,11 @@
 #ifdef __XTENSA__
 #include <xtensa/config/core-isa.h>
 #define MALLOC_ALIGNMENT ((XCHAL_DATA_WIDTH) < 16 ? 16 : (XCHAL_DATA_WIDTH))
+/* originally included with the newlib-xtensa */
+#define _READ_WRITE_RETURN_TYPE int
+#define _READ_WRITE_BUFSIZE_TYPE int
+/* esp8266-specific: expected to be set via configure arguments, but implicitly enable it anyway */
+#define _REENT_SMALL
 /* esp8266-specific: shrink the default fd buffer size */
 #define __BUFSIZ__ 128
 #endif

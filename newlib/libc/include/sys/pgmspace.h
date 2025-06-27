@@ -22,21 +22,31 @@
 #define PGM_VOID_P const void *
 #endif
 
+#ifndef PSTRN
+#define PSTRN(X,_) (X)
+#endif
+
 #ifndef PSTR
-#define PSTR
+#define PSTR(X) (X)
+#endif
+
+#ifndef PSTR4
+#define PSTR4(X) (X)
 #endif
 
 #ifdef __cplusplus
     #define pgm_read_byte(addr)             (*reinterpret_cast<const uint8_t*>(addr))
     #define pgm_read_word(addr)             (*reinterpret_cast<const uint16_t*>(addr))
     #define pgm_read_dword(addr)            (*reinterpret_cast<const uint32_t*>(addr))
-    #define pgm_read_float(addr)            (*reinterpret_cast<const float>(addr))
+    #define pgm_read_float(addr)            (*reinterpret_cast<const float*>(addr))
+    #define pgm_read_double(addr)           (*reinterpret_cast<const float*>(addr))
     #define pgm_read_ptr(addr)              (*reinterpret_cast<const void*>(addr))
 #else
     #define pgm_read_byte(addr)             (*(const uint8_t*)(addr))
     #define pgm_read_word(addr)             (*(const uint16_t*)(addr))
     #define pgm_read_dword(addr)            (*(const uint32_t*)(addr))
-    #define pgm_read_float(addr)            (*(const float)(addr))
+    #define pgm_read_float(addr)            (*(const float*)(addr))
+    #define pgm_read_double(addr)           (*(const double*)(addr))
     #define pgm_read_ptr(addr)              (*(const void*)(addr))
 #endif
 

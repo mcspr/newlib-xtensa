@@ -23,6 +23,7 @@
 #define __need_size_t
 #include <stddef.h>
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include <string.h>

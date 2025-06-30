@@ -31,16 +31,17 @@ jobs:
 
     - name: Toolchain
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         mkdir -p $HOME/toolchain/
         pushd $HOME/toolchain/
         for fremote in "package/package_esp8266com_index.template.json" "tools/get.py" ; do
           flocal="${fremote##*/}"
-          gh api \
-            --header "Accept: application/vnd.github.v3.raw" \
-            repos/esp8266/Arduino/contents/$fremote \
-            > "$flocal"
+          # -H "Authentication: Bearer ${{ github.token }}"
+          curl \
+            -H "Accept: application/vnd.github.VERSION.raw" \
+            -o "$flocal" \
+            https://api.github.com/repos/esp8266/Arduino/contents/$fremote
         done
         python get.py \
           --no-progress \

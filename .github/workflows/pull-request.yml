@@ -29,7 +29,7 @@ jobs:
         for fremote in "package/package_esp8266com_index.template.json" "tools/get.py" ; do
           flocal="${fremote##*/}"
           curl \
-            -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ github.token }}" \
             -H "Accept: application/vnd.github.VERSION.raw" \
             -o "$flocal" \
             https://api.github.com/repos/esp8266/Arduino/contents/$fremote

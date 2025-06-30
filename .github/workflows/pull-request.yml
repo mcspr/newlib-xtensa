@@ -24,28 +24,30 @@ jobs:
 
     - name: Toolchain
       run: |
-        mkdir -p $HOME/toolchain/package
-        pushd $HOME/toolchain/package
-        curl \
-          -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.VERSION.raw" \
-          -o package_esp8266com_index.template.json \
-          https://api.github.com/repos/esp8266/Arduino/contents/package/package_esp8266com_index.template.json
-        popd
+        echo ">>> Without header"
+        curl -v https://api.github.com/rate_limit
+        echo ">>> With header"
+        curl -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" -v https://api.github.com/rate_limit
 
-        mkdir -p $HOME/toolchain/tools
-        pushd $HOME/toolchain/tools
-        curl \
-          -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.VERSION.raw" \
-          -o get.py \
-          https://api.github.com/repos/esp8266/Arduino/contents/tools/get.py
-        python get.py -t xtensa-lx106-elf
+        mkdir -p $HOME/toolchain/
+        pushd $HOME/toolchain/
+        for fremote in "package/package_esp8266com_index.template.json" "tools/get.py" ; do
+          flocal="${fremote##*/}"
+          curl \
+            -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.VERSION.raw" \
+            -o "$flocal" \
+            https://api.github.com/repos/esp8266/Arduino/contents/$fremote
+        done
+        python get.py \
+          --no-progress \
+          --package-index-json package_esp8266com_index.template.json \
+          --tool xtensa-lx106-elf
         popd
 
     - name: Build
       run: |
-        export PATH=$HOME/toolchain/tools/xtensa-lx106-elf/bin/:$PATH
+        export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH
         ./configure \
           CFLAGS_FOR_TARGET="-mlongcalls -Os -g -free -fipa-pta" \
           --target=xtensa-lx106-elf \
@@ -54,7 +56,6 @@ jobs:
           --prefix=/newlib \
           --disable-newlib-io-c99-formats \
           --disable-newlib-supplied-syscalls \
-          --disable-newlib-wide-orient \
           --disable-option-checking \
           --disable-shared \
           --enable-multilib \
@@ -65,7 +66,7 @@ jobs:
 
     - name: Archive
       run: |
-        export PATH=$HOME/toolchain/tools/xtensa-lx106-elf/bin/:$PATH
+        export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH
 
         for t in . xtensa-lx106-elf/newlib ; do
           mkdir -p $HOME/archive/build-$t

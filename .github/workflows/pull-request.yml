@@ -25,9 +25,9 @@ jobs:
     - name: Token check
       run: |
           echo ">>> Without token"
-          gh api --verbose rate_limit
+          curl -v https://api.github.com/rate_limit
           echo ">>> With token"
-          env GH_TOKEN="${{ secrets.GITHUB_TOKEN }}" gh api --verbose rate_limit
+          curl -H "Authorization: Bearer ${{ github.token }}" -v https://api.github.com/rate_limit
 
     - name: Toolchain
       env:

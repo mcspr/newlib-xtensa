@@ -22,22 +22,25 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Toolchain
+    - name: Token check
       run: |
-        echo ">>> Without header"
-        curl -v https://api.github.com/rate_limit
-        echo ">>> With header"
-        curl -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" -v https://api.github.com/rate_limit
+          echo ">>> Without token"
+          gh api --verbose rate_limit
+          echo ">>> With token"
+          env GH_TOKEN="${{ secrets.GITHUB_TOKEN }}" gh api --verbose rate_limit
 
+    - name: Toolchain
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
         mkdir -p $HOME/toolchain/
         pushd $HOME/toolchain/
         for fremote in "package/package_esp8266com_index.template.json" "tools/get.py" ; do
           flocal="${fremote##*/}"
-          curl \
-            -H "Authentication: ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.VERSION.raw" \
-            -o "$flocal" \
-            https://api.github.com/repos/esp8266/Arduino/contents/$fremote
+          gh api \
+            --header "Accept: application/vnd.github.v3.raw" \
+            repos/esp8266/Arduino/contents/$fremote \
+            > "$flocal"
         done
         python get.py \
           --no-progress \

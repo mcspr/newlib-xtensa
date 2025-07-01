@@ -10,6 +10,10 @@
 #define __need_size_t
 #include <stddef.h>
 
+#define __need___va_list
+#define __need_va_arg
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

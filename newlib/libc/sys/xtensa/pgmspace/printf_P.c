@@ -5,7 +5,7 @@
 
 int printf_P(const char* formatP, ...) {
     int ret;
-    va_list arglist;
+    __gnuc_va_list arglist;
     va_start(arglist, formatP);
     ret = vprintf(formatP, arglist);
     va_end(arglist);

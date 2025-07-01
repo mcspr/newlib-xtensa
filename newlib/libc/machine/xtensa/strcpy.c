@@ -25,10 +25,15 @@
 #include <stddef.h>
 
 #include <string.h>
+#undef strcpy
 
-char *strcpy(char *dest, const char *src)
+#include "../../sys/xtensa/pgmspace/_pgmspace.h"
+
+char *strcpy(char *__restrict dest, const char *__restrict src)
 {
-    extern char *__fast_strcpy(char *dest, const char *src);
-    if (src >= (const char *)0x40000000) return strcpy_P(dest, src);
-    else return __fast_strcpy(dest, src);
+    extern char *__fast_strcpy(char *__restrict, const char *__restrict);
+    if (__pgm_expected(src))
+        return strcpy_P(dest, src);
+
+    return __fast_strcpy(dest, src);
 }

@@ -69,12 +69,13 @@ LIBRARIES = $(noinst_LIBRARIES)
 ARFLAGS = cru
 lib_a_AR = $(AR) $(ARFLAGS)
 lib_a_LIBADD =
-am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT) lib_a-strcpy.$(OBJEXT) \
-	lib_a-strncpy.$(OBJEXT) lib_a-bzero.$(OBJEXT) \
+am_lib_a_OBJECTS = lib_a-setjmp.$(OBJEXT) lib_a-atexit.$(OBJEXT) \
+	lib_a-bzero.$(OBJEXT) lib_a-time.$(OBJEXT) \
 	lib_a-memcmp.$(OBJEXT) lib_a-memcpy.$(OBJEXT) \
 	lib_a-memmove.$(OBJEXT) lib_a-memset.$(OBJEXT) \
 	lib_a-strcmp.$(OBJEXT) lib_a-strlen.$(OBJEXT) \
 	lib_a-strncmp.$(OBJEXT) lib_a-strstr.$(OBJEXT) \
+	lib_a-strcpy.$(OBJEXT) lib_a-strncpy.$(OBJEXT) \
 	lib_a-fast_memcpy.$(OBJEXT) lib_a-fast_memset.$(OBJEXT) \
 	lib_a-fast_strcmp.$(OBJEXT) lib_a-fast_strcpy.$(OBJEXT) \
 	lib_a-fast_strlen.$(OBJEXT) lib_a-fast_strncpy.$(OBJEXT)
@@ -203,10 +204,10 @@ AUTOMAKE_OPTIONS = cygnus
 INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 AM_CCASFLAGS = $(INCLUDES)
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = setjmp.S strcpy.c strncpy.c bzero.S memcmp.S memcpy.S \
+lib_a_SOURCES = setjmp.S atexit.c bzero.S time.c memcmp.S memcpy.S \
 	memmove.S memset.S strcmp.S strlen.S strncmp.S strstr.S \
-	fast_memcpy.S fast_memset.S fast_strcmp.S fast_strcpy.S \
-	fast_strlen.S fast_strncpy.S
+	strcpy.c strncpy.c fast_memcpy.S fast_memset.S fast_strcmp.S \
+	fast_strcpy.S fast_strlen.S fast_strncpy.S
 lib_a_CCASFLAGS = $(AM_CCASFLAGS)
 lib_a_CFLAGS = $(AM_CFLAGS)
 TARGETDOC = ../../tmp.texi
@@ -371,6 +372,18 @@ lib_a-fast_strncpy.obj: fast_strncpy.S
 
 .c.obj:
 	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+lib_a-atexit.o: atexit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-atexit.o `test -f 'atexit.c' || echo '$(srcdir)/'`atexit.c
+
+lib_a-atexit.obj: atexit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-atexit.obj `if test -f 'atexit.c'; then $(CYGPATH_W) 'atexit.c'; else $(CYGPATH_W) '$(srcdir)/atexit.c'; fi`
+
+lib_a-time.o: time.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-time.o `test -f 'time.c' || echo '$(srcdir)/'`time.c
+
+lib_a-time.obj: time.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-time.obj `if test -f 'time.c'; then $(CYGPATH_W) 'time.c'; else $(CYGPATH_W) '$(srcdir)/time.c'; fi`
 
 lib_a-strcpy.o: strcpy.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-strcpy.o `test -f 'strcpy.c' || echo '$(srcdir)/'`strcpy.c

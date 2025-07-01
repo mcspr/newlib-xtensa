@@ -6,7 +6,7 @@ INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 
 noinst_LIBRARIES = lib.a
 
-lib_a_SOURCES = atexit.c creat.c isatty.c clibrary_init.c lock.c
+lib_a_SOURCES = clibrary_init.c creat.c isatty.c lock.c
 
 ## avr-like functions to access data from memory that only allows 32bit aligned reads
 lib_a_SOURCES += \

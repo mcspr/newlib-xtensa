@@ -10,9 +10,14 @@ noinst_LIBRARIES = lib.a
 
 lib_a_SOURCES = setjmp.S
 
+## Override some libc files
+lib_a_SOURCES += atexit.c bzero.S time.c
+
 ## ESP8266 ROM funcs that override newlib ones
+lib_a_SOURCES += memcmp.S memcpy.S memmove.S memset.S strcmp.S strlen.S strncmp.S strstr.S
+
+## ESP8266 ROM overrides that jump to either fast_... or ..._P
 lib_a_SOURCES += strcpy.c strncpy.c
-lib_a_SOURCES += bzero.S memcmp.S memcpy.S memmove.S memset.S strcmp.S strlen.S strncmp.S strstr.S
 
 ## Preserve original newlib-xtensa files as `fast_$NAME.S`
 lib_a_SOURCES += fast_memcpy.S fast_memset.S fast_strcmp.S fast_strcpy.S fast_strlen.S fast_strncpy.S

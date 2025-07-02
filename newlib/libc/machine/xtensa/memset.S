@@ -1,4 +1,1 @@
-	.file	"memset.c"
-	.text
-	.ident	"ESP8266 has this in ROM"
-	.section	.note.GNU-stack,"",@progbits
+/* ESP8266 has this in ROM */

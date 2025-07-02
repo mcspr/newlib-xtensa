@@ -16,10 +16,4 @@
 
 #include <machine/_default_types.h>
 
-#ifdef _IN_ADDR_T_DECLARED
-#ifndef IN_ADDR_T_DEFINED
-#define IN_ADDR_T_DEFINED 1 // For LWIP2
-#endif
-#endif
-
 #endif

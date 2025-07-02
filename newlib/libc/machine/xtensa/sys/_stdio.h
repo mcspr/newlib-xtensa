@@ -1,10 +1,18 @@
 /* #defines for legacy PROGMEM _P functions which are no longer needed, but kept for backwards compatibility */
 
-#ifndef _MACHINE_STDIO_H_
-#define _MACHINE_STDIO_H_
+#ifndef _NEWLIB_STDIO_H
+#error "must be included via <sys/stdio.h>"
+#endif
+
+#ifndef _SYS__STDIO_H_
+#define _SYS__STDIO_H_
 
 #define __need_size_t
 #include <stddef.h>
+
+#define __need___va_list
+#define __need_va_arg
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {

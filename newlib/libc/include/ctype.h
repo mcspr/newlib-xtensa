@@ -3,8 +3,7 @@
 
 #include "_ansi.h"
 #include <sys/cdefs.h>
-
-#include <machine/ctype.h>
+#include <sys/ctype.h>
 
 #if __POSIX_VISIBLE >= 200809 || __MISC_VISIBLE || defined (_LIBC)
 #include <sys/_locale.h>
@@ -90,7 +89,7 @@ const char *__locale_ctype_ptr (void);
    since isalpha(0x100000001LL) must equal isalpha(1), rather than being
    an out-of-bounds reference on a 64-bit machine.  */
 #ifndef __ctype_lookup
-  #define __ctype_lookup(__c) ((__CTYPE_PTR+sizeof(""[__c]))[(int)(__c)])
+    #define __ctype_lookup(__c) ((__CTYPE_PTR+sizeof(""[__c]))[(int)(__c)])
 #endif
 
 #define	isalpha(__c)	(__ctype_lookup(__c)&(_U|_L))

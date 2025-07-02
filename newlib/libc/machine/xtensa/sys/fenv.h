@@ -36,6 +36,7 @@ extern "C" {
 typedef unsigned long fenv_t;
 typedef unsigned long fexcept_t;
 
+#ifndef __XTENSA_SOFT_FLOAT__
 #define FE_DIVBYZERO   0x08
 #define FE_INEXACT     0x01
 #define FE_INVALID     0x10
@@ -53,8 +54,6 @@ typedef unsigned long fexcept_t;
 #define FE_TONEAREST  0x0
 #define FE_TOWARDZERO 0x1
 #define FE_UPWARD     0x2
-
-#define FE_DFL_ENV ((const fenv_t *) 0)
 
 int  feclearexcept(int);
 int  fegetexceptflag(fexcept_t *, int);
@@ -80,6 +79,13 @@ int fegetexcept(void);
 #define _FE_ROUND_MODE_OFFSET 0
 #define _FE_ROUND_MODE_MASK (0x3 << _FE_ROUND_MODE_OFFSET)
 #define _FE_FLOATING_ENV_MASK (_FE_EXCEPTION_FLAG_MASK | _FE_EXCEPTION_ENABLE_MASK | _FE_ROUND_MODE_MASK)
+
+#else
+#define FE_TONEAREST  0x0
+#define FE_ALL_EXCEPT 0
+#endif
+
+#define FE_DFL_ENV ((const fenv_t *) 0)
 
 #ifdef __cplusplus
 }

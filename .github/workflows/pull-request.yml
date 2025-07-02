@@ -17,16 +17,29 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
+
     - uses: actions/setup-python@v4
       with:
         python-version: '3.x'
+
     - name: Toolchain
       run: |
-        mkdir -p $HOME/toolchain
-        pushd $HOME/toolchain
-        wget https://github.com/earlephilhower/esp-quick-toolchain/releases/download/3.2.0-gcc10.3/x86_64-linux-gnu.xtensa-lx106-elf-c791b74.230224.tar.gz
-        tar xf x86_64-linux-gnu.xtensa-lx106-elf-*.tar.gz
+        mkdir -p $HOME/toolchain/
+        pushd $HOME/toolchain/
+        for fremote in "package/package_esp8266com_index.template.json" "tools/get.py" ; do
+          flocal="${fremote##*/}"
+          curl \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github.VERSION.raw" \
+            -o "$flocal" \
+            https://api.github.com/repos/esp8266/Arduino/contents/$fremote
+        done
+        python get.py \
+          --no-progress \
+          --package-index-json package_esp8266com_index.template.json \
+          --tool xtensa-lx106-elf
         popd
+
     - name: Build
       run: |
         export PATH=$HOME/toolchain/xtensa-lx106-elf/bin/:$PATH

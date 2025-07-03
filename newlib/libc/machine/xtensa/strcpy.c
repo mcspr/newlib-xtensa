@@ -31,9 +31,9 @@
 
 char *strcpy(char *__restrict dest, const char *__restrict src)
 {
-    extern char *__fast_strcpy(char *__restrict, const char *__restrict);
+    typeof(strcpy) *__rom_strcpy = (typeof(strcpy)*)(0x4000bec8);
     if (__pgm_expected(src))
         return strcpy_P(dest, src);
 
-    return __fast_strcpy(dest, src);
+    return __rom_strcpy(dest, src);
 }

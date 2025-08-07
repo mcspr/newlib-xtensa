@@ -5,7 +5,7 @@
 #include <sys/cdefs.h>
 #include <sys/ctype.h>
 
-#if __POSIX_VISIBLE >= 200809 || __MISC_VISIBLE || defined (_COMPILING_NEWLIB)
+#if __POSIX_VISIBLE >= 200809 || __MISC_VISIBLE || defined (_LIBC)
 #include <sys/_locale.h>
 #endif
 

@@ -28,11 +28,6 @@
     SA Pacific Standard Time/HT 
     South Africa Standard Time/LY
 
-  It also doesn't contain deprecated country codes used in older
-  OSes, namely:
-
-    CS (Serbian and Montenegro, dissolved, now RS and ME) used in Vista
- 
   While these are apparently old, they are required here to get a complete
   mapping on all supported OSes. */
 struct
@@ -119,7 +114,6 @@ struct
   { L"Central Brazilian Standard Time", L"BR", L"America/Cuiaba America/Campo_Grande" },
   { L"Central Europe Standard Time", L"", L"Europe/Budapest" },
   { L"Central Europe Standard Time", L"AL", L"Europe/Tirane" },
-  { L"Central Europe Standard Time", L"CS", L"Europe/Belgrade" },
   { L"Central Europe Standard Time", L"CZ", L"Europe/Prague" },
   { L"Central Europe Standard Time", L"HU", L"Europe/Budapest" },
   { L"Central Europe Standard Time", L"ME", L"Europe/Podgorica" },
@@ -132,7 +126,7 @@ struct
   { L"Central European Standard Time", L"MK", L"Europe/Skopje" },
   { L"Central European Standard Time", L"PL", L"Europe/Warsaw" },
   { L"Central Pacific Standard Time", L"", L"Pacific/Guadalcanal" },
-  { L"Central Pacific Standard Time", L"AU", L"Antarctica/Macquarie" },
+  { L"Central Pacific Standard Time", L"AQ", L"Antarctica/Casey" },
   { L"Central Pacific Standard Time", L"FM", L"Pacific/Ponape Pacific/Kosrae" },
   { L"Central Pacific Standard Time", L"NC", L"Pacific/Noumea" },
   { L"Central Pacific Standard Time", L"SB", L"Pacific/Guadalcanal" },
@@ -164,7 +158,6 @@ struct
   { L"E. Africa Standard Time", L"KM", L"Indian/Comoro" },
   { L"E. Africa Standard Time", L"MG", L"Indian/Antananarivo" },
   { L"E. Africa Standard Time", L"SO", L"Africa/Mogadishu" },
-  { L"E. Africa Standard Time", L"SS", L"Africa/Juba" },
   { L"E. Africa Standard Time", L"TZ", L"Africa/Dar_es_Salaam" },
   { L"E. Africa Standard Time", L"UG", L"Africa/Kampala" },
   { L"E. Africa Standard Time", L"YT", L"Indian/Mayotte" },
@@ -224,6 +217,7 @@ struct
   { L"Greenwich Standard Time", L"CI", L"Africa/Abidjan" },
   { L"Greenwich Standard Time", L"EH", L"Africa/El_Aaiun" },
   { L"Greenwich Standard Time", L"GH", L"Africa/Accra" },
+  { L"Greenwich Standard Time", L"GL", L"America/Danmarkshavn" },
   { L"Greenwich Standard Time", L"GM", L"Africa/Banjul" },
   { L"Greenwich Standard Time", L"GN", L"Africa/Conakry" },
   { L"Greenwich Standard Time", L"GW", L"Africa/Bissau" },
@@ -408,7 +402,6 @@ struct
   { L"Saratov Standard Time", L"", L"Europe/Saratov" },
   { L"Saratov Standard Time", L"RU", L"Europe/Saratov" },
   { L"Singapore Standard Time", L"", L"Asia/Singapore" },
-  { L"Singapore Standard Time", L"AQ", L"Antarctica/Casey" },
   { L"Singapore Standard Time", L"BN", L"Asia/Brunei" },
   { L"Singapore Standard Time", L"ID", L"Asia/Makassar" },
   { L"Singapore Standard Time", L"MY", L"Asia/Kuala_Lumpur Asia/Kuching" },
@@ -429,6 +422,8 @@ struct
   { L"South Africa Standard Time", L"ZM", L"Africa/Lusaka" },
   { L"South Africa Standard Time", L"ZW", L"Africa/Harare" },
   { L"South Africa Standard Time", L"ZZ", L"Etc/GMT-2" },
+  { L"South Sudan Standard Time", L"", L"Africa/Juba" },
+  { L"South Sudan Standard Time", L"SS", L"Africa/Juba" },
   { L"Sri Lanka Standard Time", L"", L"Asia/Colombo" },
   { L"Sri Lanka Standard Time", L"LK", L"Asia/Colombo" },
   { L"Sudan Standard Time", L"", L"Africa/Khartoum" },
@@ -438,7 +433,7 @@ struct
   { L"Taipei Standard Time", L"", L"Asia/Taipei" },
   { L"Taipei Standard Time", L"TW", L"Asia/Taipei" },
   { L"Tasmania Standard Time", L"", L"Australia/Hobart" },
-  { L"Tasmania Standard Time", L"AU", L"Australia/Hobart Australia/Currie" },
+  { L"Tasmania Standard Time", L"AU", L"Australia/Hobart Australia/Currie Antarctica/Macquarie" },
   { L"Tocantins Standard Time", L"", L"America/Araguaina" },
   { L"Tocantins Standard Time", L"BR", L"America/Araguaina" },
   { L"Tokyo Standard Time", L"", L"Asia/Tokyo" },
@@ -460,13 +455,12 @@ struct
   { L"US Eastern Standard Time", L"", L"America/Indianapolis" },
   { L"US Eastern Standard Time", L"US", L"America/Indianapolis America/Indiana/Marengo America/Indiana/Vevay" },
   { L"US Mountain Standard Time", L"", L"America/Phoenix" },
-  { L"US Mountain Standard Time", L"CA", L"America/Whitehorse America/Creston  America/Dawson  America/Dawson_Creek America/Fort_Nelson" },
+  { L"US Mountain Standard Time", L"CA", L"America/Creston America/Dawson_Creek America/Fort_Nelson" },
   { L"US Mountain Standard Time", L"MX", L"America/Hermosillo" },
   { L"US Mountain Standard Time", L"US", L"America/Phoenix" },
   { L"US Mountain Standard Time", L"ZZ", L"Etc/GMT+7" },
-  { L"UTC", L"", L"Etc/GMT" },
-  { L"UTC", L"GL", L"America/Danmarkshavn" },
-  { L"UTC", L"ZZ", L"Etc/GMT Etc/UTC" },
+  { L"UTC", L"", L"Etc/UTC" },
+  { L"UTC", L"ZZ", L"Etc/UTC Etc/GMT" },
   { L"UTC-02", L"", L"Etc/GMT+2" },
   { L"UTC-02", L"BR", L"America/Noronha" },
   { L"UTC-02", L"GS", L"Atlantic/South_Georgia" },
@@ -558,4 +552,6 @@ struct
   { L"West Pacific Standard Time", L"ZZ", L"Etc/GMT-10" },
   { L"Yakutsk Standard Time", L"", L"Asia/Yakutsk" },
   { L"Yakutsk Standard Time", L"RU", L"Asia/Yakutsk Asia/Khandyga" },
+  { L"Yukon Standard Time", L"", L"America/Whitehorse" },
+  { L"Yukon Standard Time", L"CA", L"America/Whitehorse America/Dawson" },
 };

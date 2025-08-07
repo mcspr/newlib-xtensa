@@ -29,7 +29,6 @@ srcdir = @srcdir@
 objdir = .
 srcroot = $(srcdir)/../..
 objroot = $(objdir)/../..
-top_srcdir = @top_srcdir@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -49,7 +48,7 @@ MULTISUBDIR =
 
 SHELL =	/bin/sh
 
-mkinstalldirs = $(SHELL) $(top_srcdir)/../../mkinstalldirs
+mkinstalldirs = $(SHELL) $(srcroot)/mkinstalldirs
 
 CC = @CC@
 
@@ -63,9 +62,6 @@ RANLIB = @RANLIB@
 
 OBJDUMP = `t='$(program_transform_name)'; echo objdump | sed -e $$t`
 OBJCOPY = `t='$(program_transform_name)'; echo objcopy | sed -e $$t`
-
-# linker scripts
-SCRIPTS = `ls ${srcdir}/ldscripts/*.x`
 
 # object files needed
 OBJS = \
@@ -101,10 +97,7 @@ LDFLAGS_FOR_TARGET = ${MULTILIB}
 .S.o:
 	$(CC) $(CFLAGS_FOR_TARGET) $(INCLUDES) $(CFLAGS) -c $<
 
-all: ${OUTPUTS} copy_scripts_to_objdir
-
-copy_scripts_to_objdir: $(srcdir)/ldscripts/gen-ld-scripts.sh
-	cp $(SCRIPTS) $(objdir)
+all: ${OUTPUTS}
 
 #
 # here's where we build the library for each target
@@ -127,10 +120,10 @@ clean mostlyclean:
 	rm -f $(OUTPUTS) *.i *~ *.o *-test *.srec *.dis *.map *.x
 
 distclean maintainer-clean realclean: clean
-	rm -f Makefile config.status $(OUTPUTS)
+	rm -f Makefile $(OUTPUTS)
 
 .PHONY: install info install-info clean-info
-install: $(OUTPUTS) $(srcdir)/ldscripts/gen-ld-scripts.sh
+install: $(OUTPUTS)
 	for outputs in ${OUTPUTS}; do\
 	 ${INSTALL_DATA} $${outputs} ${DESTDIR}${tooldir}/lib${MULTISUBDIR}/$${outputs}; \
 	done
@@ -148,8 +141,5 @@ info:
 install-info:
 clean-info:
 
-Makefile: $(srcdir)/Makefile.in config.status @host_makefile_frag_path@
-	$(SHELL) config.status
-
-config.status: $(srcdir)/configure
-	$(SHELL) config.status --recheck
+Makefile: $(srcdir)/Makefile.in ../config.status
+	cd .. && $(SHELL) config.status

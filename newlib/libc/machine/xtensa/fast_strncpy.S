@@ -56,6 +56,9 @@ __fast_strncpy_aux:
 	j	.Lfill
 
 .Lret:
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
 	leaf_return
 
 
@@ -120,10 +123,14 @@ __fast_strncpy:
 	s8i	a9, a10, 0	// store byte 0
 	addi	a4, a4, -1	// decrement n
 	addi	a10, a10, 1
-	bnez    a4, .Lfillcleanup 
+	bnez    a4, .Lfillcleanup
 
-2:	leaf_return
-	
+2:
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
+	leaf_return
+
 .Lfill1mod2: // dst address is odd
 	s8i	a9, a10, 0	// store byte 0
 	addi	a4, a4, -1	// decrement n
@@ -172,7 +179,7 @@ __fast_strncpy:
 	addi	a4, a4, -4	// decrement n
 	addi	a10, a10, 4	// advance dst pointer
 	bnone	a8, a7, .Lfill	// if byte 3 is zero
-1:	
+1:
 
 #else /* !XCHAL_HAVE_LOOPS */
 
@@ -241,6 +248,11 @@ __fast_strncpy:
 #endif
 1:	l8ui	a8, a3, 0
 	addi	a3, a3, 1
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	nop
+	nop
+	nop
+#endif
 	s8i	a8, a10, 0
 	addi	a4, a4, -1
 	beqz	a4, 3f
@@ -252,7 +264,11 @@ __fast_strncpy:
 #endif
 2:	j	.Lfill
 
-3:	leaf_return
+3:
+#if XTENSA_ESP32_PSRAM_CACHE_FIX
+	memw
+#endif
+	leaf_return
 .end schedule
 
 	.size	__fast_strncpy, . - __fast_strncpy

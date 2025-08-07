@@ -218,8 +218,13 @@
 #else
 #define __IEEE_LITTLE_ENDIAN
 #endif
-#ifdef __riscv_flen
+#if defined(__riscv_flen) || defined (__riscv_zfinx)
 # define _SUPPORTS_ERREXCEPT
+#endif
+#if (__riscv_flen == 64) || defined (__riscv_zdinx)
+# define __OBSOLETE_MATH_DEFAULT 0
+#else
+# define __OBSOLETE_MATH_DEFAULT 1
 #endif
 #endif
 
@@ -489,14 +494,6 @@
 # endif
 #endif
 
-#if (defined(__XTENSA__))
-# ifdef __XTENSA_EB__
-#  define __IEEE_BIG_ENDIAN
-# else
-#  define __IEEE_LITTLE_ENDIAN
-# endif
-#endif
-
 #ifdef __VISIUM__
 #define __IEEE_BIG_ENDIAN
 #endif
@@ -507,6 +504,10 @@
 
 #ifdef __XTENSA_EL__
 #define __IEEE_LITTLE_ENDIAN
+#endif
+
+#ifdef __XTENSA_EB__
+#define __IEEE_BIG_ENDIAN
 #endif
 
 #ifdef __CYGWIN__

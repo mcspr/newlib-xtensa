@@ -28,3 +28,8 @@ libc_a_SOURCES += \
 	%D%/fast_strcpy.S \
 	%D%/fast_strlen.S \
 	%D%/fast_strncpy.S
+
+if XTENSA_ESP32_PSRAM_CACHE_FIX
+libc_a_CPPFLAGS_%C% = \
+	-DXTENSA_ESP32_PSRAM_CACHE_FIX
+endif

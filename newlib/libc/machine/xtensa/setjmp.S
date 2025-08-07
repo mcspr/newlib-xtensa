@@ -21,7 +21,7 @@
    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
 
-/* Windowed ABI:	
+/* Windowed ABI:
 
    This implementation relies heavily on the Xtensa register window
    mechanism.  Setjmp flushes all the windows except its own to the
@@ -49,7 +49,7 @@
    and longjmp are ever time-critical, this could be removed.
 
 
-   Call0 ABI:	
+   Call0 ABI:
 
    Much like other ABIs, this version just saves the necessary registers
    to the stack and restores them later.  Much less needs to be done.  */
@@ -138,19 +138,11 @@ longjmp:
 	entry	sp, 16
 	/*  a2 == &env, a3 == val  */
 
-#if XCHAL_MAYHAVE_ERRATUM_XEA1KWIN
-  /* Using this register triggers early any overflow that a kernel-mode
-     level-one interrupt might otherwise cause.  */
-# define AR_WB	a15
-#else
-  /* Using this register is more efficient; it triggers less overflows.  */
-# define AR_WB	a5
-#endif
 	/* Invalidate all but the current window;
 	   set WindowStart to (1 << WindowBase).  */
-	rsr	AR_WB, WINDOWBASE
+	rsr	a5, WINDOWBASE
 	movi	a4, 1
-	ssl	AR_WB
+	ssl	a5
 	sll	a4, a4
 	wsr	a4, WINDOWSTART
 	rsync
@@ -228,7 +220,7 @@ longjmp:
 	.literal_position
 	.global	setjmp
 	.type	setjmp, @function
-setjmp:	
+setjmp:
 	s32i	a0, a2, 0
 	s32i	a1, a2, 4
 	s32i	a12, a2, 8

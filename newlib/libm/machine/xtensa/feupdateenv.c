@@ -28,6 +28,7 @@
 #include <xtensa/config/core-isa.h>
 
 #if XCHAL_HAVE_FP || XCHAL_HAVE_DFP
+
 #include <fenv.h>
 
 int feupdateenv(const fenv_t * envp)

@@ -23,7 +23,7 @@
 #ifndef REENTRANT_SYSCALLS_PROVIDED
 
 int
-unlink (char * path)
+unlink (const char * path)
 {
   errno = EIO;
   return (-1);

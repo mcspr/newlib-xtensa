@@ -1,8 +1,23 @@
 libc_a_SOURCES += \
-	%D%/setjmp.S \
+	%D%/setjmp.S
+
+## Base libc file overries
+libc_a_SOURCES += \
 	%D%/atexit.c \
 	%D%/bzero.S \
+	%D%/creat.c \
+	%D%/isattyr.c \
+	%D%/lock.c \
 	%D%/time.c
+
+## Preserve original newlib files as `fast_$NAME.S`
+libc_a_SOURCES += \
+	%D%/fast_memcpy.S \
+	%D%/fast_memset.S \
+	%D%/fast_strcmp.S \
+	%D%/fast_strcpy.S \
+	%D%/fast_strlen.S \
+	%D%/fast_strncpy.S
 
 ## ESP8266 ROM funcs that override newlib ones
 libc_a_SOURCES += \
@@ -20,14 +35,8 @@ libc_a_SOURCES += \
 	%D%/strcpy.c \
 	%D%/strncpy.c
 
-## Preserve original newlib-xtensa files as `fast_$NAME.S`
-libc_a_SOURCES += \
-	%D%/fast_memcpy.S \
-	%D%/fast_memset.S \
-	%D%/fast_strcmp.S \
-	%D%/fast_strcpy.S \
-	%D%/fast_strlen.S \
-	%D%/fast_strncpy.S
+## ESP8266 avr-like functions to access data from memory that only allows 32bit aligned reads
+include %D%/pgmspace/Makefile.inc
 
 if XTENSA_ESP32_PSRAM_CACHE_FIX
 libc_a_CPPFLAGS_%C% = \

@@ -27,7 +27,7 @@
 #include <string.h>
 #undef strcpy
 
-#include "../../sys/xtensa/pgmspace/_pgmspace.h"
+#include "pgmspace/_pgmspace.h"
 
 char *strcpy(char *__restrict dest, const char *__restrict src)
 {

@@ -20,10 +20,7 @@ extern char inbyte (void);
  * read  -- read bytes from the serial port. Ignore fd, since
  *          we only have stdin.
  */
-
-#ifndef REENTRANT_SYSCALLS_PROVIDED
-
-int
+_READ_WRITE_RETURN_TYPE
 read (int fd,
        void *buf_,
        size_t nbytes)
@@ -40,30 +37,3 @@ read (int fd,
   }
   return (i);
 }
-
-#else /* REENTRANT_SYSCALLS_PROVIDED */
-
-#include <sys/reent.h>
-
-int
-_DEFUN (_read_r, (ptr, fd, buf, nbytes),
-	struct _reent *ptr _AND
-	int fd _AND
-	char *buf _AND
-	int nbytes)
-{
-  int i = 0;
-
-  for (i = 0; i < nbytes; i++)
-    {
-      *(buf + i) = inbyte ();
-      if ((*(buf + i) == '\n') || (*(buf + i) == '\r'))
-	{
-	  i++;
-	  break;
-	}
-    }
-  return i;
-}
-
-#endif /* REENTRANT_SYSCALLS_PROVIDED */

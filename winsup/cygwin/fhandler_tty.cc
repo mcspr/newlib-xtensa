@@ -1109,6 +1109,11 @@ fhandler_pty_slave::tcgetattr (struct termios *t)
 {
   reset_switch_to_pcon ();
   *t = get_ttyp ()->ti;
+  /* Workaround for rlwrap */
+  if (get_ttyp ()->pcon_start)
+    t->c_lflag &= ~(ICANON | ECHO);
+  if (get_ttyp ()->h_pseudo_console)
+    t->c_iflag &= ~ICRNL;
   return 0;
 }
 
@@ -2043,7 +2048,7 @@ fhandler_pty_master::pty_master_fwd_thread ()
 	  /* Remove CSI > Pm m */
 	  int state = 0;
 	  int start_at = 0;
-	  for (DWORD i=0; i<rlen; i++)
+	  for (DWORD i = 0; i < rlen; i++)
 	    if (outbuf[i] == '\033')
 	      {
 		start_at = i;
@@ -2063,6 +2068,37 @@ fhandler_pty_master::pty_master_fwd_thread ()
 		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
 		rlen = wlen = start_at + rlen - i - 1;
 		state = 0;
+		i = start_at - 1;
+		continue;
+	      }
+	    else
+	      state = 0;
+
+	  /* Remove OSC Ps ; ? BEL/ST */
+	  for (DWORD i = 0; i < rlen; i++)
+	    if (state == 0 && outbuf[i] == '\033')
+	      {
+		start_at = i;
+		state = 1;
+		continue;
+	      }
+	    else if ((state == 1 && outbuf[i] == ']')
+		     || (state == 2 && outbuf[i] == ';')
+		     || (state == 3 && outbuf[i] == '?')
+		     || (state == 4 && outbuf[i] == '\033'))
+	      {
+		state ++;
+		continue;
+	      }
+	    else if (state == 2 && isdigit (outbuf[i]))
+	      continue;
+	    else if ((state == 4 && outbuf[i] == '\a')
+		     || (state == 5 && outbuf[i] == '\\'))
+	      {
+		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
+		rlen = wlen = start_at + rlen - i - 1;
+		state = 0;
+		i = start_at - 1;
 		continue;
 	      }
 	    else
@@ -2428,8 +2464,6 @@ fhandler_pty_slave::setup_pseudoconsole (STARTUPINFOEXW *si, bool nopcon)
   if (get_ttyp ()->pcon_pid && get_ttyp ()->pcon_pid != myself->pid
       && !!pinfo (get_ttyp ()->pcon_pid))
     return false;
-  if (disable_pcon)
-    return false;
   /* If the legacy console mode is enabled, pseudo console seems
      not to work as expected. To determine console mode, registry
      key ForceV2 in HKEY_CURRENT_USER\Console is checked. */
@@ -2622,7 +2656,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
   char *p;
   int len;
   int x1, y1, x2, y2;
-  DWORD t0;
+  int wait_cnt = 0;
 
   /* Check if terminal has ANSI escape sequence. */
   if (!has_ansi_escape_sequences (env))
@@ -2639,7 +2673,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
   ReleaseMutex (input_mutex);
   p = buf;
   len = sizeof (buf) - 1;
-  t0 = GetTickCount ();
   do
     {
       if (::bytes_available (n, get_handle ()) && n)
@@ -2649,11 +2682,14 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
 	  len -= n;
 	  *p = '\0';
 	  char *p1 = strrchr (buf, '\033');
-	  if (p1 == NULL || sscanf (p1, "\033[%d;%dR", &y1, &x1) != 2)
+	  char c;
+	  if (p1 == NULL || sscanf (p1, "\033[%d;%d%c", &y1, &x1, &c) != 3
+	      || c != 'R')
 	    continue;
+	  wait_cnt = 0;
 	  break;
 	}
-      else if (GetTickCount () - t0 > 40) /* Timeout */
+      else if (++wait_cnt > 100) /* Timeout */
 	goto not_has_csi6n;
       else
 	Sleep (1);
@@ -2681,7 +2717,9 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
       len -= n;
       *p = '\0';
       char *p2 = strrchr (buf, '\033');
-      if (p2 == NULL || sscanf (p2, "\033[%d;%dR", &y2, &x2) != 2)
+      char c;
+      if (p2 == NULL || sscanf (p2, "\033[%d;%d%c", &y2, &x2, &c) != 3
+	  || c != 'R')
 	continue;
       break;
     }

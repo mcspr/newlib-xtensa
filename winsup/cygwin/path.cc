@@ -863,19 +863,28 @@ path_conv::check (const char *src, unsigned opt,
 			dev.parse (FH_FS);
 			goto is_fs_via_procsys;
 		      case virt_blk:
-			/* Block special device.  If the trailing slash has been
-			   requested, the target is the root directory of the
-			   filesystem on this block device.  So we convert this
-			   to a real file and attach the backslash. */
-			if (component == 0 && need_directory)
+			/* Block special device.  Convert to a /dev/sd* like
+			   block device unless the trailing slash has been
+			   requested.  In this case, the target is the root
+			   directory of the filesystem on this block device.
+			   So we convert this to a real file and attach the
+			   backslash. */
+			if (component == 0)
 			  {
-			    dev.parse (FH_FS);
-			    strcat (full_path, "\\");
-			    fileattr = FILE_ATTRIBUTE_DIRECTORY
-				       | FILE_ATTRIBUTE_DEVICE;
+			    fileattr = FILE_ATTRIBUTE_DEVICE;
+			    if (!need_directory)
+			      /* Use a /dev/sd* device number > /dev/sddx.
+				 FIXME: Define a new major DEV_ice number. */
+			      dev.parse (DEV_SD_HIGHPART_END, 9999);
+			    else
+			      {
+				dev.parse (FH_FS);
+				strcat (full_path, "\\");
+				fileattr |= FILE_ATTRIBUTE_DIRECTORY;
+			      }
 			    goto out;
 			  }
-			fallthrough;
+			break;
 		      case virt_chr:
 			if (component == 0)
 			  fileattr = FILE_ATTRIBUTE_DEVICE;
@@ -1008,7 +1017,7 @@ path_conv::check (const char *src, unsigned opt,
 		{
 		  if (component == 0
 		      && (!(opt & PC_SYM_FOLLOW)
-			  || (is_known_reparse_point ()
+			  || (is_winapi_reparse_point ()
 			      && (opt & PC_SYM_NOFOLLOW_REP))))
 		    {
 		      /* Usually a trailing slash requires to follow a symlink,
@@ -2613,7 +2622,7 @@ check_reparse_point_target (HANDLE h, bool remote, PREPARSE_DATA_BUFFER rp,
 	    }
 	  RtlInitCountedUnicodeString (psymbuf, utf16_buf,
 				       utf16_bufsize * sizeof (WCHAR));
-	  return PATH_SYMLINK | PATH_REP;
+	  return PATH_SYMLINK | PATH_REP | PATH_REP_NOAPI;
 	}
       return -EIO;
     }
@@ -2623,10 +2632,10 @@ check_reparse_point_target (HANDLE h, bool remote, PREPARSE_DATA_BUFFER rp,
 
       if (memcmp (CYGWIN_SOCKET_GUID, &rgp->ReparseGuid, sizeof (GUID)) == 0)
 #ifdef __WITH_AF_UNIX
-	return PATH_SOCKET | PATH_REP;
+	return PATH_SOCKET | PATH_REP | PATH_REP_NOAPI;
 #else
         /* Recognize this as a reparse point but not as a socket.  */
-        return PATH_REP;
+        return PATH_REP | PATH_REP_NOAPI;
 #endif
     }
   return 0;

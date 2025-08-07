@@ -12,7 +12,6 @@
 srcdir:=@srcdir@
 target_builddir:=@target_builddir@
 winsup_srcdir:=@winsup_srcdir@
-configure_args=@configure_args@
 
 CC:=@CC@
 CXX:=@CXX@
@@ -673,13 +672,9 @@ $(TEST_LIB_NAME): $(LIB_NAME)
 $(LIBSERVER): ${cygserver_blddir}/Makefile
 	$(MAKE) -C ${cygserver_blddir} libcygserver.a
 
-${cygserver_blddir}/Makefile:
-	/bin/mkdir -p ${@D}
-	cd ${@D} && exec /bin/sh $(dir ${srcdir})/cygserver/configure ${configure_args}
-
 dll_ofiles: $(DLL_OFILES)
 
-$(LIBGMON_A): $(GMON_OFILES) $(GMON_START)
+$(LIBGMON_A): $(GMON_OFILES)
 	$(AR) rcv $(LIBGMON_A) $(GMON_OFILES)
 
 globals.h: mkglobals_h globals.cc
@@ -688,10 +683,10 @@ globals.h: mkglobals_h globals.cc
 ${DLL_OFILES} ${LIBCOS}: globals.h $(srcdir)/$(TLSOFFSETS_H)
 
 shared_info_magic.h: cygmagic shared_info.h
-	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
+	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
 
 child_info_magic.h: cygmagic child_info.h
-	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
+	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
 
 dcrt0.o sigproc.o: child_info_magic.h
 
@@ -703,7 +698,7 @@ localtime.patched.c: tzcode/localtime.c tzcode/localtime.c.patch
 		    $(srcdir)/tzcode/localtime.c.patch
 
 localtime.o: tzcode/localtime_wrapper.c localtime.patched.c
-	$(CC) ${COMMON_CFLAGS} ${localtime_CFLAGS} \
+	$(CC) $(CXXFLAGS) ${COMMON_CFLAGS} ${localtime_CFLAGS} \
 		-I$(target_builddir)/winsup/cygwin \
 		-I$(srcdir) -I$(srcdir)/tzcode -c -o $@ $<
 
@@ -753,9 +748,6 @@ version.cc: mkvers.sh include/cygwin/version.h winver.rc $(src_files)
 	export CC="${CC}";\
 	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) ${CFLAGS} -I${srcdir}/include
 $(VERSION_OFILES): version.cc
-
-Makefile: ${srcdir}/Makefile.in
-	/bin/sh ./config.status
 
 $(DEF_FILE): gendef $(srcdir)/$(TLSOFFSETS_H) $(DIN_FILE)
 	$(word 1,$^) --cpu=${target_cpu} --output-def=$@  --tlsoffsets=$(word 2,$^) $(wordlist 3,99,$^)

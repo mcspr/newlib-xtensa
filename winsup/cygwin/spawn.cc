@@ -431,6 +431,13 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
 
       c_flags |= CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT;
 
+      /* Add CREATE_DEFAULT_ERROR_MODE flag for non-Cygwin processes so they
+	 get the default error mode instead of inheriting the mode Cygwin
+	 uses.  This allows things like Windows Error Reporting/JIT debugging
+	 to work with processes launched from a Cygwin shell. */
+      if (!real_path.iscygexec ())
+	c_flags |= CREATE_DEFAULT_ERROR_MODE;
+
       /* We're adding the CREATE_BREAKAWAY_FROM_JOB flag here to workaround
 	 issues with the "Program Compatibility Assistant (PCA) Service".
 	 For some reason, when starting long running sessions from mintty(*),
@@ -649,7 +656,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
       if (!iscygwin () && ptys_primary && is_console_app (runpath))
 	{
 	  bool nopcon = mode != _P_OVERLAY && mode != _P_WAIT;
-	  if (!ptys_primary->term_has_pcon_cap (envblock))
+	  if (disable_pcon || !ptys_primary->term_has_pcon_cap (envblock))
 	    nopcon = true;
 	  if (ptys_primary->setup_pseudoconsole (&si_pcon, nopcon))
 	    {

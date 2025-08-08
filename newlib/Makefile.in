@@ -239,12 +239,10 @@ check_PROGRAMS =
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/vsiscanf.c \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/vsniprintf.c \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/sfputs_r.c \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/sfputws_r.c \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/sprint_r.c \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/swprint_r.c \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/ssputs_r.c \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/ssprint_r.c \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/sswprint_r.c
+@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/ssprint_r.c
 
 @HAVE_STDIO_DIR_TRUE@am__append_12 = libc/stdio/clearerr.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/fclose.c libc/stdio/fdopen.c \
@@ -277,7 +275,10 @@ check_PROGRAMS =
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/setvbuf.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/snprintf.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/sprintf.c libc/stdio/sscanf.c \
-@HAVE_STDIO_DIR_TRUE@	libc/stdio/ssputws_r.c libc/stdio/stdio.c \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/sfputws_r.c \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/ssputws_r.c \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/sswprint_r.c \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/stdio.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/svfiwprintf.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/svfiwscanf.c \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/svfwprintf.c \
@@ -1231,12 +1232,10 @@ am__objects_5 = libc/stdlib/libc_a-rpmatch.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-vsiscanf.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-vsniprintf.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-sfputs_r.$(OBJEXT) \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-sfputws_r.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-sprint_r.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-swprint_r.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-ssputs_r.$(OBJEXT) \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-ssprint_r.$(OBJEXT) \
-@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-sswprint_r.$(OBJEXT)
+@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-ssprint_r.$(OBJEXT)
 @ELIX_LEVEL_1_FALSE@@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@am__objects_12 = libc/stdio/libc_a-asiprintf.$(OBJEXT) \
 @ELIX_LEVEL_1_FALSE@@HAVE_STDIO_DIR_TRUE@@NEWLIB_NANO_FORMATTED_IO_FALSE@	libc/stdio/libc_a-vasiprintf.$(OBJEXT)
 @ELIX_LEVEL_1_FALSE@@HAVE_STDIO_DIR_TRUE@am__objects_13 = libc/stdio/libc_a-asprintf.$(OBJEXT) \
@@ -1360,7 +1359,9 @@ am__objects_5 = libc/stdlib/libc_a-rpmatch.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-snprintf.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-sprintf.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-sscanf.$(OBJEXT) \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-sfputws_r.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-ssputws_r.$(OBJEXT) \
+@HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-sswprint_r.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-stdio.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-svfiwprintf.$(OBJEXT) \
 @HAVE_STDIO_DIR_TRUE@	libc/stdio/libc_a-svfiwscanf.$(OBJEXT) \
@@ -6087,8 +6088,6 @@ libc/stdio/libc_a-vsniprintf.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-sfputs_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
-libc/stdio/libc_a-sfputws_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
-	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-sprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-swprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
@@ -6096,8 +6095,6 @@ libc/stdio/libc_a-swprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 libc/stdio/libc_a-ssputs_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-ssprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
-	libc/stdio/$(DEPDIR)/$(am__dirstamp)
-libc/stdio/libc_a-sswprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-clearerr.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
@@ -6207,7 +6204,11 @@ libc/stdio/libc_a-sprintf.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-sscanf.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
+libc/stdio/libc_a-sfputws_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
+	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-ssputws_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
+	libc/stdio/$(DEPDIR)/$(am__dirstamp)
+libc/stdio/libc_a-sswprint_r.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
 libc/stdio/libc_a-stdio.$(OBJEXT): libc/stdio/$(am__dirstamp) \
 	libc/stdio/$(DEPDIR)/$(am__dirstamp)
@@ -24560,20 +24561,6 @@ libc/stdio/libc_a-sfputs_r.obj: libc/stdio/sfputs_r.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sfputs_r.obj `if test -f 'libc/stdio/sfputs_r.c'; then $(CYGPATH_W) 'libc/stdio/sfputs_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sfputs_r.c'; fi`
 
-libc/stdio/libc_a-sfputws_r.o: libc/stdio/sfputws_r.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sfputws_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo -c -o libc/stdio/libc_a-sfputws_r.o `test -f 'libc/stdio/sfputws_r.c' || echo '$(srcdir)/'`libc/stdio/sfputws_r.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sfputws_r.c' object='libc/stdio/libc_a-sfputws_r.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sfputws_r.o `test -f 'libc/stdio/sfputws_r.c' || echo '$(srcdir)/'`libc/stdio/sfputws_r.c
-
-libc/stdio/libc_a-sfputws_r.obj: libc/stdio/sfputws_r.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sfputws_r.obj -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo -c -o libc/stdio/libc_a-sfputws_r.obj `if test -f 'libc/stdio/sfputws_r.c'; then $(CYGPATH_W) 'libc/stdio/sfputws_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sfputws_r.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sfputws_r.c' object='libc/stdio/libc_a-sfputws_r.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sfputws_r.obj `if test -f 'libc/stdio/sfputws_r.c'; then $(CYGPATH_W) 'libc/stdio/sfputws_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sfputws_r.c'; fi`
-
 libc/stdio/libc_a-sprint_r.o: libc/stdio/sprint_r.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sprint_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sprint_r.Tpo -c -o libc/stdio/libc_a-sprint_r.o `test -f 'libc/stdio/sprint_r.c' || echo '$(srcdir)/'`libc/stdio/sprint_r.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sprint_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sprint_r.Po
@@ -24629,20 +24616,6 @@ libc/stdio/libc_a-ssprint_r.obj: libc/stdio/ssprint_r.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/ssprint_r.c' object='libc/stdio/libc_a-ssprint_r.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-ssprint_r.obj `if test -f 'libc/stdio/ssprint_r.c'; then $(CYGPATH_W) 'libc/stdio/ssprint_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/ssprint_r.c'; fi`
-
-libc/stdio/libc_a-sswprint_r.o: libc/stdio/sswprint_r.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sswprint_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo -c -o libc/stdio/libc_a-sswprint_r.o `test -f 'libc/stdio/sswprint_r.c' || echo '$(srcdir)/'`libc/stdio/sswprint_r.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sswprint_r.c' object='libc/stdio/libc_a-sswprint_r.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sswprint_r.o `test -f 'libc/stdio/sswprint_r.c' || echo '$(srcdir)/'`libc/stdio/sswprint_r.c
-
-libc/stdio/libc_a-sswprint_r.obj: libc/stdio/sswprint_r.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sswprint_r.obj -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo -c -o libc/stdio/libc_a-sswprint_r.obj `if test -f 'libc/stdio/sswprint_r.c'; then $(CYGPATH_W) 'libc/stdio/sswprint_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sswprint_r.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sswprint_r.c' object='libc/stdio/libc_a-sswprint_r.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sswprint_r.obj `if test -f 'libc/stdio/sswprint_r.c'; then $(CYGPATH_W) 'libc/stdio/sswprint_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sswprint_r.c'; fi`
 
 libc/stdio/libc_a-clearerr.o: libc/stdio/clearerr.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-clearerr.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-clearerr.Tpo -c -o libc/stdio/libc_a-clearerr.o `test -f 'libc/stdio/clearerr.c' || echo '$(srcdir)/'`libc/stdio/clearerr.c
@@ -25400,6 +25373,20 @@ libc/stdio/libc_a-sscanf.obj: libc/stdio/sscanf.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sscanf.obj `if test -f 'libc/stdio/sscanf.c'; then $(CYGPATH_W) 'libc/stdio/sscanf.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sscanf.c'; fi`
 
+libc/stdio/libc_a-sfputws_r.o: libc/stdio/sfputws_r.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sfputws_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo -c -o libc/stdio/libc_a-sfputws_r.o `test -f 'libc/stdio/sfputws_r.c' || echo '$(srcdir)/'`libc/stdio/sfputws_r.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sfputws_r.c' object='libc/stdio/libc_a-sfputws_r.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sfputws_r.o `test -f 'libc/stdio/sfputws_r.c' || echo '$(srcdir)/'`libc/stdio/sfputws_r.c
+
+libc/stdio/libc_a-sfputws_r.obj: libc/stdio/sfputws_r.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sfputws_r.obj -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo -c -o libc/stdio/libc_a-sfputws_r.obj `if test -f 'libc/stdio/sfputws_r.c'; then $(CYGPATH_W) 'libc/stdio/sfputws_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sfputws_r.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sfputws_r.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sfputws_r.c' object='libc/stdio/libc_a-sfputws_r.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sfputws_r.obj `if test -f 'libc/stdio/sfputws_r.c'; then $(CYGPATH_W) 'libc/stdio/sfputws_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sfputws_r.c'; fi`
+
 libc/stdio/libc_a-ssputws_r.o: libc/stdio/ssputws_r.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-ssputws_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-ssputws_r.Tpo -c -o libc/stdio/libc_a-ssputws_r.o `test -f 'libc/stdio/ssputws_r.c' || echo '$(srcdir)/'`libc/stdio/ssputws_r.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-ssputws_r.Tpo libc/stdio/$(DEPDIR)/libc_a-ssputws_r.Po
@@ -25413,6 +25400,20 @@ libc/stdio/libc_a-ssputws_r.obj: libc/stdio/ssputws_r.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/ssputws_r.c' object='libc/stdio/libc_a-ssputws_r.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-ssputws_r.obj `if test -f 'libc/stdio/ssputws_r.c'; then $(CYGPATH_W) 'libc/stdio/ssputws_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/ssputws_r.c'; fi`
+
+libc/stdio/libc_a-sswprint_r.o: libc/stdio/sswprint_r.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sswprint_r.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo -c -o libc/stdio/libc_a-sswprint_r.o `test -f 'libc/stdio/sswprint_r.c' || echo '$(srcdir)/'`libc/stdio/sswprint_r.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sswprint_r.c' object='libc/stdio/libc_a-sswprint_r.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sswprint_r.o `test -f 'libc/stdio/sswprint_r.c' || echo '$(srcdir)/'`libc/stdio/sswprint_r.c
+
+libc/stdio/libc_a-sswprint_r.obj: libc/stdio/sswprint_r.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-sswprint_r.obj -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo -c -o libc/stdio/libc_a-sswprint_r.obj `if test -f 'libc/stdio/sswprint_r.c'; then $(CYGPATH_W) 'libc/stdio/sswprint_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sswprint_r.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Tpo libc/stdio/$(DEPDIR)/libc_a-sswprint_r.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='libc/stdio/sswprint_r.c' object='libc/stdio/libc_a-sswprint_r.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -c -o libc/stdio/libc_a-sswprint_r.obj `if test -f 'libc/stdio/sswprint_r.c'; then $(CYGPATH_W) 'libc/stdio/sswprint_r.c'; else $(CYGPATH_W) '$(srcdir)/libc/stdio/sswprint_r.c'; fi`
 
 libc/stdio/libc_a-stdio.o: libc/stdio/stdio.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libc_a_CPPFLAGS) $(CPPFLAGS) $(libc_a_CFLAGS) $(CFLAGS) -MT libc/stdio/libc_a-stdio.o -MD -MP -MF libc/stdio/$(DEPDIR)/libc_a-stdio.Tpo -c -o libc/stdio/libc_a-stdio.o `test -f 'libc/stdio/stdio.c' || echo '$(srcdir)/'`libc/stdio/stdio.c

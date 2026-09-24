@@ -9,20 +9,21 @@
 extern "C" {
 #endif
 
+// The following two macros cause a parameter to be enclosed in quotes
+// by the preopressor (i.e. for concatenating ints to strings)
+#define __PGMSPACE_STRINGIZE_NX(A) #A
+#define __PGMSPACE_STRINGIZE(A) __PGMSPACE_STRINGIZE_NX(A)
+
 #ifndef ICACHE_RODATA_ATTR
   #define ICACHE_RODATA_ATTR __attribute__((section(".irom.text")))
 #endif
 #ifndef PROGMEM
-  // The following two macros cause a parameter to be enclosed in quotes
-  // by the preopressor (i.e. for concatenating ints to strings)
-  #define __STRINGIZE_NX(A) #A
-  #define __STRINGIZE(A) __STRINGIZE_NX(A)
   // Since __section__ is supposed to be only use for global variables,
   // there could be conflicts when a static/inlined function has them in the
   // same file as a non-static PROGMEM object.
   // Ref: https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Variable-Attributes.html
   // Place each progmem object into its own named section, avoiding conflicts
-  #define PROGMEM __attribute__((section( "\".irom.text." __FILE__ "." __STRINGIZE(__LINE__) "."  __STRINGIZE(__COUNTER__) "\"")))
+  #define PROGMEM __attribute__((section( "\".irom.text." __FILE__ "." __PGMSPACE_STRINGIZE(__LINE__) "."  __PGMSPACE_STRINGIZE(__COUNTER__) "\"")))
 #endif
 #ifndef PGM_P
   #define PGM_P              const char *
@@ -41,7 +42,7 @@ extern "C" {
     // Multi-alignment variant of PSTR, n controls the alignment and should typically be 1 or 4
     // Adapted from AVR-specific code at https://forum.arduino.cc/index.php?topic=194603.0
     // Uses C attribute section instead of ASM block to allow for C language string concatenation ("x" "y" === "xy")
-    #define PSTRN(s,n) (__extension__({static const char __pstr__[] __attribute__((__aligned__(n))) __attribute__((section( "\".irom0.pstr." __FILE__ "." __STRINGIZE(__LINE__) "."  __STRINGIZE(__COUNTER__) "\", \"aSM\", @progbits, 1 #"))) = (s); &__pstr__[0];}))
+    #define PSTRN(s,n) (__extension__({static const char __pstr__[] __attribute__((__aligned__(n))) __attribute__((section( "\".irom0.pstr." __FILE__ "." __PGMSPACE_STRINGIZE(__LINE__) "."  __PGMSPACE_STRINGIZE(__COUNTER__) "\", \"aSM\", @progbits, 1 #"))) = (s); &__pstr__[0];}))
 #endif
 #ifndef PSTR
   // PSTR() uses the default alignment defined by PSTR_ALIGN

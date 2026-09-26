@@ -38,11 +38,30 @@ extern "C" {
   // Allow users to override the alignment with PSTR_ALIGN
   #define PSTR_ALIGN 4
 #endif
+#ifndef PSTR_ATTR
+  // PSTR() macro uses section attribute to flag the static data as flash string
+  // Allow users to flag their own strings independently. Note that this does not set initial alignment
+  #define PSTR_ATTR __attribute__((section( "\".irom0.pstr." __FILE__ "." __PGMSPACE_STRINGIZE(__LINE__) "."  __PGMSPACE_STRINGIZE(__COUNTER__) "\", \"aSM\", @progbits, 1 #")))
+#endif
+#ifndef PSTR_CONSTEXPR
+  // PSTR() macro return value should be able exist in constexpr context
+  #if (__cplusplus >= 201103L)
+    #define PSTR_CONSTEXPR constexpr
+  #else
+    #define PSTR_CONSTEXPR
+  #endif
+#endif
+#ifndef PSTR_ALIGN_ATTR
+  #define PSTR_ALIGN_ATTR(n) __attribute__((__aligned__(n)))
+#endif
 #ifndef PSTRN
     // Multi-alignment variant of PSTR, n controls the alignment and should typically be 1 or 4
     // Adapted from AVR-specific code at https://forum.arduino.cc/index.php?topic=194603.0
     // Uses C attribute section instead of ASM block to allow for C language string concatenation ("x" "y" === "xy")
-    #define PSTRN(s,n) (__extension__({static const char __pstr__[] __attribute__((__aligned__(n))) __attribute__((section( "\".irom0.pstr." __FILE__ "." __PGMSPACE_STRINGIZE(__LINE__) "."  __PGMSPACE_STRINGIZE(__COUNTER__) "\", \"aSM\", @progbits, 1 #"))) = (s); &__pstr__[0];}))
+    #define PSTRN(s,n) (__extension__({\
+        static PSTR_CONSTEXPR const char __pstr__[] PSTR_ALIGN_ATTR(n) PSTR_ATTR = (s);\
+        &__pstr__[0];\
+    }))
 #endif
 #ifndef PSTR
   // PSTR() uses the default alignment defined by PSTR_ALIGN

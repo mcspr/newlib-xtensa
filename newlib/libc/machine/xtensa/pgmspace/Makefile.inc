@@ -6,9 +6,13 @@ libc_a_SOURCES += \
     %D%/memcpy_P.c \
     %D%/memmem_P.c \
     %D%/memmove_P.c \
+    %D%/printf_P.c \
+    %D%/snprintf_P.c \
+    %D%/sprintf_P.c \
     %D%/strncasecmp_P.c \
     %D%/strncat_P.c \
     %D%/strncmp_P.c \
     %D%/strncpy_P.c \
     %D%/strnlen_P.c \
-    %D%/strstr_P.c
+    %D%/strstr_P.c \
+    %D%/vsnprintf_P.c
